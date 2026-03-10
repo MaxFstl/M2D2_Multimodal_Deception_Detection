@@ -118,7 +118,7 @@ M2D2_Multimodal_Deception_Detection/
 - [x] Create directory structure (src/data, src/models, src/training, src/utils, tests, configs, scripts, notebooks, checkpoints, logs)
 - [x] Create **init**.py files for all Python packages
 - [x] Create pyproject.toml with dependencies (torch, transformers, pandas, numpy, etc.)
-- [ ] Create base config YAML file (configs/default.yaml) with model/training/data parameters
+- [x] Create base config YAML file (configs/default.yaml) with model/training/data parameters
 
 ### Phase 2: Data Pipeline
 
