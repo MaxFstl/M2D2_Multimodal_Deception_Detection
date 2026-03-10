@@ -29,8 +29,15 @@ M2D2 (Multimodal Deception Detection Model) is a transformer-based framework for
 ### Prerequisites
 
 - Python 3.8+, CUDA 11.0+, 16GB RAM, 20GB disk
+- [uv](https://github.com/astral-sh/uv) installed (`curl -LsSf https://astral.sh/uv/install.sh | sh`)
 
 ### Setup
+
+```bash
+uv venv
+uv sync
+uv sync --group dev  # With dev dependencies (pytest, ruff, mypy)
+```
 
 ---
 
@@ -43,6 +50,15 @@ M2D2 (Multimodal Deception Detection Model) is a transformer-based framework for
 ### Inference
 
 ### Testing & Linting
+
+```bash
+pytest                    # Run all tests
+pytest -v                 # Verbose
+pytest -k "pattern"       # Pattern matching
+ruff check .              # Linter
+ruff format .             # Formatter
+mypy src/                 # Type checking
+```
 
 ---
 
@@ -61,7 +77,6 @@ M2D2_Multimodal_Deception_Detection/
 ├── notebooks/             # Data exploration, analysis
 ├── checkpoints/           # Saved models
 ├── logs/                  # Training logs
-├── requirements.txt       # Dependencies
 └── AGENTS.md              # AI agent guidelines
 ```
 
@@ -95,6 +110,71 @@ M2D2_Multimodal_Deception_Detection/
 - **Modality Contribution**: Visual (micro-expressions), Audio (prosody), Text (linguistic cues)
 - **Efficiency**: 5-10% parameter fine-tuning
 - **Interpretability**: Attention weights for modality importance
+
+---
+
+## Development Progress
+
+### Phase 1: Project Setup
+- [x] Create directory structure (src/data, src/models, src/training, src/utils, tests, configs, scripts, notebooks, checkpoints, logs)
+- [x] Create __init__.py files for all Python packages
+- [ ] Create pyproject.toml with dependencies (torch, transformers, pandas, numpy, etc.)
+- [ ] Create base config YAML file (configs/default.yaml) with model/training/data parameters
+
+### Phase 2: Data Pipeline
+- [ ] Implement dataset loader (src/data/dataset.py) - DOLOS video/audio/text loading
+- [ ] Implement video preprocessing (src/data/video_utils.py) - frame extraction, normalization
+- [ ] Implement audio preprocessing (src/data/audio_utils.py) - resampling to 16kHz, feature extraction
+- [ ] Implement ASR transcription module (src/data/asr.py) - Whisper integration
+- [ ] Implement text preprocessing (src/data/text_utils.py) - BERT tokenization, max len 512
+- [ ] Implement data transforms/augmentations (src/utils/augmentations.py)
+- [ ] Create DataLoader with stratified splits (src/data/loaders.py)
+- [ ] Write unit tests for data loading pipeline
+
+### Phase 3: Models
+- [ ] Implement visual encoder branch (src/models/visual.py) - ViT-B/16 + UT-Adapter
+- [ ] Implement audio encoder branch (src/models/audio.py) - Wav2Vec2 + UT-Adapter
+- [ ] Implement text encoder branch (src/models/text.py) - BERT + adapter
+- [ ] Implement cross-attention fusion module (src/models/fusion.py) - 2-4 heads, dim 768
+- [ ] Implement classifier head (src/models/classifier.py) - MLP to [B, 512] -> binary
+- [ ] Implement main M2D2 model (src/models/m2d2.py) - combine all components
+- [ ] Write unit tests for model components
+
+### Phase 4: Training
+- [ ] Implement training loop (src/training/trainer.py) - epoch iteration, logging
+- [ ] Implement loss functions (src/training/losses.py) - weighted cross-entropy for imbalance
+- [ ] Implement optimizer & scheduler (src/training/optim.py) - AdamW, lr=1e-4
+- [ ] Implement checkpointing (src/utils/checkpoint.py) - save/load model state
+- [ ] Implement early stopping (src/training/early_stopping.py)
+- [ ] Implement metrics tracking (src/utils/metrics.py) - accuracy, F1, AUC-ROC
+- [ ] Create train.py script (scripts/train.py) - CLI interface
+
+### Phase 5: Evaluation
+- [ ] Implement evaluation pipeline (src/training/evaluate.py)
+- [ ] Create evaluate.py script (scripts/evaluate.py) - checkpoint loading, metrics
+- [ ] Implement confusion matrix and classification report generation
+
+### Phase 6: Inference
+- [ ] Implement inference pipeline (src/utils/inference.py)
+- [ ] Create inference.py script (scripts/inference.py) - single clip prediction
+
+### Phase 7: Utils
+- [ ] Implement seed setting for reproducibility (src/utils/reproducibility.py)
+- [ ] Implement logging utilities (src/utils/logging_utils.py)
+
+### Phase 8: Testing
+- [ ] Write comprehensive test suite for all modules
+- [ ] Set up pytest configuration and conftest.py fixtures
+- [ ] Run all tests and achieve >80% coverage
+
+### Phase 9: Documentation
+- [ ] Update README.md with complete usage instructions
+- [ ] Add docstrings to all modules, classes, and functions
+
+### Phase 10: Final
+- [ ] Run linting and type checking (ruff, mypy)
+- [ ] Create experiment configs for different hyperparameter settings
+- [ ] End-to-end integration test with sample data
 
 ---
 
