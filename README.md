@@ -37,6 +37,12 @@ M2D2 (Multimodal Deception Detection Model) is a transformer-based framework for
 uv sync
 ```
 
+Download the videos:
+
+```
+uv run -m scripts.download_data
+```
+
 ---
 
 ## Usage
