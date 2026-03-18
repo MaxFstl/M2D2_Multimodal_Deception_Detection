@@ -1,3 +1,7 @@
+# FROM: https://github.com/NMS05/Audio-Visual-Deception-Detection-DOLOS-Dataset-and-Parameter-Efficient-Crossmodal-Learning/blob/main/scripts/dataloader/audio_visual_dataset.py
+
+# TODO: Extend the text data
+
 import os
 import pandas as pd
 from PIL import Image
