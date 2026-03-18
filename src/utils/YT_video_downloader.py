@@ -12,15 +12,26 @@ import ffmpeg
 
 
 class VidInfo:
-    def __init__(self, yt_id, file_name, start_time, end_time, outdir):
+    def _parse_time(self, time_str: str) -> float:
+        if ":" not in time_str:
+            return float(time_str)
+        parts = time_str.split(":")
+        if len(parts) == 2:
+            minutes, seconds = parts
+            return int(minutes) * 60 + float(seconds)
+        elif len(parts) == 3:
+            hours, minutes, seconds = parts
+            return int(hours) * 3600 + int(minutes) * 60 + float(seconds)
+        return float(time_str)
+
+    def __init__(self, yt_id, file_name, start_time: str, end_time: str, outdir):
         self.yt_id = yt_id
-        self.start_time = float(start_time)
-        self.end_time = float(end_time)
+        self.start_time = self._parse_time(start_time)
+        self.end_time = self._parse_time(end_time)
         self.out_filename = os.path.join(outdir, file_name + ".mp4")
 
 
 def download(vidinfo):
-
     yt_base_url = "https://www.youtube.com/watch?v="
 
     yt_url = yt_base_url + vidinfo.yt_id
@@ -34,8 +45,8 @@ def download(vidinfo):
     try:
         with YoutubeDL(ydl_opts) as ydl:
             download_url = ydl.extract_info(url=yt_url, download=False)["url"]
-    except:
-        return_msg = "{}, ERROR (youtube)!".format(vidinfo.yt_id)
+    except Exception as e:
+        return_msg = "{}, ERROR (youtube): {}".format(vidinfo.yt_id, str(e))
         return return_msg
     try:
         (
@@ -56,33 +67,8 @@ def download(vidinfo):
             .global_args("-loglevel", "error")
             .run()
         )
-    except:
-        return_msg = "{}, ERROR (ffmpeg)!".format(vidinfo.yt_id)
+    except Exception as e:
+        return_msg = "{}, ERROR (ffmpeg): {}".format(vidinfo.yt_id, str(e))
         return return_msg
 
     return "{}, DONE!".format(vidinfo.yt_id)
-
-
-if __name__ == "__main__":
-
-    split = sys.argv[1]  # name of the destination folder
-    csv_file = sys.argv[2]
-    out_dir = split
-
-    os.makedirs(out_dir, exist_ok=True)
-
-    with open(csv_file, "r") as f:
-        lines = f.readlines()
-        lines = [x.split(",") for x in lines]
-        # yt_id, file_name, start_time, end_time
-        vidinfos = [VidInfo(x[0], x[1], x[2], x[3], out_dir) for x in lines]
-
-    bad_files = open("bad_files_{}.txt".format(split), "w")
-    results = ThreadPool(5).imap_unordered(download, vidinfos)
-    cnt = 0
-    for r in results:
-        cnt += 1
-        print(cnt, "/", len(vidinfos), r)
-        if "ERROR" in r:
-            bad_files.write(r + "\n")
-    bad_files.close()

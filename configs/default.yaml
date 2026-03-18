@@ -20,7 +20,7 @@ training:
   early_stopping:
     patience: 5
     min_delta: 0.001
-  class_weights: [1.0, 1.5]  # [truthful, deceptive]
+  class_weights: [1.0, 1.5] # [truthful, deceptive]
 
 data:
   dataset: DOLOS
@@ -46,9 +46,11 @@ data:
 paths:
   data_dir: data/DOLOS
   video_dir: data/DOLOS/videos
+  image_dir: data/DOLOS/images
   audio_dir: data/DOLOS/audio
   text_dir: data/DOLOS/transcripts
   annotations: data/DOLOS/annotations.csv
+  timestamps: data/DOLOS/dolos_timestamps.csv
   checkpoint_dir: checkpoints
   log_dir: logs
 

@@ -122,7 +122,8 @@ M2D2_Multimodal_Deception_Detection/
 
 ### Phase 2: Data Pipeline
 
-- [ ] Implement dataset loader (src/data/dataset.py) - DOLOS video/audio/text loading
+- [x] Automatically download the data (scripts/download_data.py) -> uv run -m scripts.download_data.py
+- [x] Implement dataset loader (src/data/dataset.py) - DOLOS video/audio/text loading
 - [ ] Implement video preprocessing (src/data/video_utils.py) - frame extraction, normalization
 - [ ] Implement audio preprocessing (src/data/audio_utils.py) - resampling to 16kHz, feature extraction
 - [ ] Implement ASR transcription module (src/data/asr.py) - Whisper integration

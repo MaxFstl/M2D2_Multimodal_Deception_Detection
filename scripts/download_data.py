@@ -1,0 +1,50 @@
+import os
+
+from src.utils.YT_video_downloader import download, VidInfo
+from multiprocessing.pool import ThreadPool
+from src.utils.load_config import load_config
+
+config = load_config()
+
+video_dir = config["paths"]["video_dir"]
+csv_file = config["paths"]["timestamps"]
+out_dir = video_dir
+
+
+def start_download(video_dir, csv_file):
+    os.makedirs(out_dir, exist_ok=True)
+
+    with open(csv_file, "r") as f:
+        lines = f.readlines()
+        lines = lines[1:]
+        lines = [x.split(",") for x in lines]
+        print(lines[:5])
+        # yt_id, file_name, start_time, end_time
+        vidinfos = [VidInfo(x[0], x[1], x[2], x[3], video_dir) for x in lines]
+
+    with open(
+        os.path.join(config["paths"]["data_dir"], "bad_files.txt"), "w"
+    ) as bad_files:
+        results = ThreadPool(5).imap_unordered(download, vidinfos)
+        cnt = 0
+        for r in results:
+            cnt += 1
+            print(cnt, "/", len(vidinfos), r)
+            if "ERROR" in r:
+                bad_files.write(r + "\n")
+        bad_files.close()
+
+
+if os.path.exists(video_dir):
+    existing_files = [f for f in os.listdir(video_dir) if f.endswith(".mp4")]
+    print(f"Found {len(existing_files)} existing videos in {video_dir}")
+
+    if len(existing_files) > 0:
+        print("Videos already exist. Skipping download.")
+
+    else:
+        print("Directory exists but empty. Downloading...")
+        start_download(video_dir, csv_file)
+else:
+    print("Creating directory and downloading...")
+    start_download(video_dir, csv_file)
