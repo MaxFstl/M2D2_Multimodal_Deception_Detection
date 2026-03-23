@@ -130,8 +130,8 @@ M2D2_Multimodal_Deception_Detection/
 
 - [x] Automatically download the data (scripts/download_data.py) -> uv run -m scripts.download_data.py
 - [x] Implement dataset loader (src/data/dataset.py) - DOLOS video/audio/text loading
-- [ ] Implement video preprocessing (src/data/video_utils.py) - frame extraction, normalization
-- [ ] Implement audio preprocessing (src/data/audio_utils.py) - resampling to 16kHz, feature extraction
+- [x] Implement video preprocessing (src/data/utils/face) - frame extraction, normalization
+- [x] Implement audio preprocessing (src/data/utils/video_to_audio.py)
 - [ ] Implement ASR transcription module (src/data/asr.py) - Whisper integration
 - [ ] Implement text preprocessing (src/data/text_utils.py) - BERT tokenization, max len 512
 - [ ] Implement data transforms/augmentations (src/utils/augmentations.py)
