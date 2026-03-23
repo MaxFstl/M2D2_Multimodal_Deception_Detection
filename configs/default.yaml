@@ -46,8 +46,8 @@ data:
 paths:
   data_dir: data/DOLOS
   video_dir: data/DOLOS/videos
-  image_dir: data/DOLOS/images
-  audio_dir: data/DOLOS/audio
+  image_dir: data/DOLOS/face_frames/
+  audio_dir: data/DOLOS/audio_files/
   text_dir: data/DOLOS/transcripts
   annotations: data/DOLOS/annotations.csv
   timestamps: data/DOLOS/dolos_timestamps.csv

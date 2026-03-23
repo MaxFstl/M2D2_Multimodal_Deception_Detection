@@ -1,8 +1,7 @@
 # FROM: https://github.com/NMS05/AV-Data-Processing/blob/main/AV%20Data%20Processing/YT_video_downloader.py
 
-import sys
 import os
-from multiprocessing.pool import ThreadPool
+from typing import Optional
 
 from yt_dlp import YoutubeDL
 import ffmpeg
@@ -14,7 +13,7 @@ import ffmpeg
 class VidInfo:
     def _parse_time(self, time_str: str) -> float:
         if ":" not in time_str:
-            return float(time_str)
+            return float(time_str * 60)
         parts = time_str.split(":")
         if len(parts) == 2:
             minutes, seconds = parts
@@ -24,11 +23,22 @@ class VidInfo:
             return int(hours) * 3600 + int(minutes) * 60 + float(seconds)
         return float(time_str)
 
-    def __init__(self, yt_id, file_name, start_time: str, end_time: str, outdir):
+    def __init__(
+        self,
+        yt_id,
+        file_name,
+        start_time: str,
+        end_time: str,
+        outdir,
+        cookiefile: Optional[str] = None,
+        sleep: float = 0,
+    ):
         self.yt_id = yt_id
         self.start_time = self._parse_time(start_time)
         self.end_time = self._parse_time(end_time)
         self.out_filename = os.path.join(outdir, file_name + ".mp4")
+        self.cookiefile = cookiefile
+        self.sleep = sleep
 
 
 def download(vidinfo):
@@ -42,6 +52,10 @@ def download(vidinfo):
         "ignoreerrors": True,
         "no_warnings": True,
     }
+    if vidinfo.cookiefile:
+        ydl_opts["cookiefile"] = vidinfo.cookiefile
+    if vidinfo.sleep:
+        ydl_opts["sleep_requests"] = vidinfo.sleep
     try:
         with YoutubeDL(ydl_opts) as ydl:
             download_url = ydl.extract_info(url=yt_url, download=False)["url"]

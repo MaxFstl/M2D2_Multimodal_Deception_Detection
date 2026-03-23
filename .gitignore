@@ -10,10 +10,13 @@ __pycache__/
 *.mp4
 data/DOLOS/videos
 data/DOLOS/images
+data/DOLOS/face_frames
+data/DOLOS/audo_files
 data/DOLOS/audio
 data/DOLOS/transcripts
 data/DOLOS/bad_files.txt
 
+cookies.txt
 # Distribution / packaging
 .Python
 build/
