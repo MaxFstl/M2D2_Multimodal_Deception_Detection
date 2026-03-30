@@ -8,6 +8,7 @@ __pycache__/
 # C extensions
 *.so
 *.mp4
+*.wav
 data/DOLOS/videos
 data/DOLOS/images
 data/DOLOS/face_frames

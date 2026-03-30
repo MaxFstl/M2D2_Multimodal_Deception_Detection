@@ -7,6 +7,16 @@ import numpy as np
 
 
 def extract_face(root_dir, save_dir):
+    if os.path.exists(save_dir):
+        existing_files = [f for f in os.listdir(save_dir)]
+        print(f"Found {len(existing_files)} existing images in {save_dir}")
+
+        if len(existing_files) > 0:
+            print("Already extracted images. Skipping this step.")
+            return
+        else:
+            print("Directory exists but empty. Preprocessing the images...")
+
     tool = FaceAlignmentTools()
 
     total_vids = len(os.listdir(root_dir))

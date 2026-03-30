@@ -32,6 +32,16 @@ save_dir_audio = config["paths"]["audio_dir"]
 
 
 def start_download(video_dir, csv_file, cookiefile=None, sleep=0):
+    if os.path.exists(video_dir):
+        existing_files = [f for f in os.listdir(video_dir)]
+        print(f"Found {len(existing_files)} existing videos in {video_dir}")
+
+        if len(existing_files) > 0:
+            print("Videos already exist. Skipping download.")
+            return
+        else:
+            print("Directory exists but empty. Preprocessing the images...")
+
     os.makedirs(out_dir, exist_ok=True)
 
     with open(csv_file, "r") as f:
@@ -56,22 +66,7 @@ def start_download(video_dir, csv_file, cookiefile=None, sleep=0):
         bad_files.close()
 
 
-if os.path.exists(video_dir):
-    existing_files = [f for f in os.listdir(video_dir) if f.endswith(".mp4")]
-    print(f"Found {len(existing_files)} existing videos in {video_dir}")
-
-    if len(existing_files) > 0:
-        print("Videos already exist. Skipping download.")
-
-    else:
-        print("Directory exists but empty. Downloading...")
-        start_download(video_dir, csv_file, args.cookies, args.sleep)
-        print("Preprocessing...")
-        extract_face(root_dir=video_dir, save_dir=save_dir_face)
-        extract_audio(video_dir=video_dir, save_dir=save_dir_audio)
-else:
-    print("Creating directory and downloading...")
-    start_download(video_dir, csv_file, args.cookies, args.sleep)
-    print("Preprocessing...")
-    extract_face(root_dir=video_dir, save_dir=save_dir_face)
-    extract_audio(video_dir=video_dir, save_dir=save_dir_audio)
+start_download(video_dir, csv_file, args.cookies, args.sleep)
+print("Preprocessing...")
+extract_face(root_dir=video_dir, save_dir=save_dir_face)
+extract_audio(video_dir=video_dir, save_dir=save_dir_audio)
