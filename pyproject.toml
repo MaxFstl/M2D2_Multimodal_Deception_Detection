@@ -25,6 +25,7 @@ dependencies = [
     "tools>=1.0.23",
     "torch>=1.13.1",
     "torchaudio>=0.13.1",
+    "torchvision>=0.14.1",
     "transformers>=4.30.2",
     "yt-dlp>=2023.11.16",
 ]
