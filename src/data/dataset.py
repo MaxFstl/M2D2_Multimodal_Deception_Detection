@@ -5,7 +5,7 @@ import random
 import numpy as np
 import pandas as pd
 from PIL import Image
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Set
 
 import torch
 from torch.utils.data import Dataset
@@ -15,8 +15,14 @@ from scipy import signal
 from transformers import BertTokenizer
 
 
+_TOKENIZER_CACHE: Optional[BertTokenizer] = None
+
+
 def _get_tokenizer() -> BertTokenizer:
-    return BertTokenizer.from_pretrained("bert-base-uncased")
+    global _TOKENIZER_CACHE
+    if _TOKENIZER_CACHE is None:
+        _TOKENIZER_CACHE = BertTokenizer.from_pretrained("bert-base-uncased")
+    return _TOKENIZER_CACHE
 
 
 class DOLOSDataset(Dataset):
@@ -31,6 +37,7 @@ class DOLOSDataset(Dataset):
         num_audio_tokens: int = 64,
         use_mock_text: bool = True,
         text_max_length: int = 512,
+        valid_clips: Optional[Set[str]] = None,
     ):
         super().__init__()
         self.annos = pd.read_csv(annotations_file)
@@ -41,6 +48,11 @@ class DOLOSDataset(Dataset):
         self.num_audio_tokens = num_audio_tokens
         self.use_mock_text = use_mock_text
         self.text_max_length = text_max_length
+
+        if valid_clips is not None:
+            self.annos = self.annos[
+                self.annos.iloc[:, 1].isin(valid_clips)
+            ].reset_index(drop=True)
 
         self.texts = texts if texts is not None else [None] * len(self.annos)
 
@@ -94,6 +106,8 @@ class DOLOSDataset(Dataset):
         audio_path = os.path.join(self.audio_dir, clip_name + ".wav")
         sample_rate, waveform = wavfile.read(audio_path)
         waveform = torch.tensor(waveform, dtype=torch.float32)
+        if waveform.dim() == 2:
+            waveform = waveform.mean(dim=1)
         if waveform.dim() == 1:
             waveform = waveform.unsqueeze(0)
         clip_duration = waveform.size(1) / sample_rate

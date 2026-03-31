@@ -1,4 +1,5 @@
 from typing import Dict, List, Optional, Tuple
+import os
 
 import numpy as np
 import pandas as pd
@@ -20,6 +21,14 @@ def create_dataloaders(
 ) -> Tuple[DataLoader, DataLoader, DataLoader]:
     annos = pd.read_csv(annotations_file)
     labels = annos.iloc[:, -1].apply(lambda x: 0 if x == "truth" else 1).tolist()
+
+    existing_audio = {
+        f.replace(".wav", "") for f in os.listdir(audio_dir) if f.endswith(".wav")
+    }
+    existing_video = {
+        d for d in os.listdir(img_dir) if os.path.isdir(os.path.join(img_dir, d))
+    }
+    valid_clips = existing_audio & existing_video
 
     train_split = config.get("train_split", 0.7)
     val_split = config.get("val_split", 0.15)
@@ -53,6 +62,7 @@ def create_dataloaders(
         frame_size=config.get("frame_size", 224),
         num_audio_tokens=config.get("num_audio_tokens", 64),
         use_mock_text=use_mock_text,
+        valid_clips=valid_clips,
     )
 
     val_dataset = DOLOSDataset(
@@ -64,6 +74,7 @@ def create_dataloaders(
         frame_size=config.get("frame_size", 224),
         num_audio_tokens=config.get("num_audio_tokens", 64),
         use_mock_text=use_mock_text,
+        valid_clips=valid_clips,
     )
 
     test_dataset = DOLOSDataset(
@@ -75,6 +86,7 @@ def create_dataloaders(
         frame_size=config.get("frame_size", 224),
         num_audio_tokens=config.get("num_audio_tokens", 64),
         use_mock_text=use_mock_text,
+        valid_clips=valid_clips,
     )
 
     batch_size = config.get("batch_size", 16)

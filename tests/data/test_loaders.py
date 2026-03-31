@@ -1,5 +1,4 @@
 import os
-import tempfile
 import numpy as np
 import pandas as pd
 import pytest
@@ -11,80 +10,53 @@ from src.data.dataset import DOLOSDataset, multimodal_collate_fn, _get_tokenizer
 
 class TestDOLOSDataset:
     @pytest.fixture
-    def mock_annos_file(self):
-        with tempfile.NamedTemporaryFile(mode="w", suffix=".csv", delete=False) as f:
-            f.write("file_name,label,gender\n")
-            f.write("clip_001,truth,M\n")
-            f.write("clip_002,deception,F\n")
-            f.write("clip_003,truth,M\n")
-            f.write("clip_004,lie,F\n")
-            f.flush()
-            yield f.name
-        os.unlink(f.name)
+    def test_data_dir(self, tmp_path):
+        annos = pd.DataFrame(
+            {
+                "video_id": ["vid001", "vid001", "vid002", "vid002"],
+                "file_name": ["clip_001", "clip_002", "clip_003", "clip_004"],
+                "start_time": ["0:00", "0:10", "0:20", "0:30"],
+                "end_time": ["0:05", "0:15", "0:25", "0:35"],
+                "label": ["truth", "deception", "truth", "deception"],
+            }
+        )
+        annos.to_csv(str(tmp_path / "annotations.csv"), index=False)
 
-    @pytest.fixture
-    def mock_audio_dir(self):
-        tmpdir = tempfile.mkdtemp()
-        yield tmpdir
-        for f in os.listdir(tmpdir):
-            os.unlink(os.path.join(tmpdir, f))
-        os.rmdir(tmpdir)
-
-    @pytest.fixture
-    def mock_img_dir(self):
-        tmpdir = tempfile.mkdtemp()
         for clip in ["clip_001", "clip_002", "clip_003", "clip_004"]:
-            clip_dir = os.path.join(tmpdir, clip)
-            os.makedirs(clip_dir)
+            clip_dir = tmp_path / clip
+            clip_dir.mkdir()
             for i in range(16):
                 img = np.random.randint(0, 255, (224, 224, 3), dtype=np.uint8)
                 from PIL import Image
 
-                Image.fromarray(img).save(os.path.join(clip_dir, f"frame_{i:04d}.jpg"))
-        yield tmpdir
-        for clip in ["clip_001", "clip_002", "clip_003", "clip_004"]:
-            clip_dir = os.path.join(tmpdir, clip)
-            for f in os.listdir(clip_dir):
-                os.unlink(os.path.join(clip_dir, f))
-            os.rmdir(clip_dir)
-        os.rmdir(tmpdir)
+                Image.fromarray(img).save(str(clip_dir / f"frame_{i:04d}.jpg"))
 
-    @pytest.fixture
-    def mock_audio_waveform(self):
-        return torch.randn(1, 16000)
+            import soundfile as sf
 
-    @pytest.fixture
-    def dataset_config(self):
+            audio_path = tmp_path / f"{clip}.wav"
+            waveform = np.random.randn(16000).astype(np.float32)
+            sf.write(str(audio_path), waveform, 16000)
+
         return {
-            "num_frames": 16,
-            "frame_size": 224,
-            "num_audio_tokens": 64,
-            "batch_size": 2,
+            "annotations_file": str(tmp_path / "annotations.csv"),
+            "audio_dir": str(tmp_path),
+            "img_dir": str(tmp_path),
         }
 
-    def test_dataset_length(self, mock_annos_file, mock_audio_dir, mock_img_dir):
+    def test_dataset_length(self, test_data_dir):
         dataset = DOLOSDataset(
-            annotations_file=mock_annos_file,
-            audio_dir=mock_audio_dir,
-            img_dir=mock_img_dir,
+            annotations_file=test_data_dir["annotations_file"],
+            audio_dir=test_data_dir["audio_dir"],
+            img_dir=test_data_dir["img_dir"],
             use_mock_text=True,
         )
         assert len(dataset) == 4
 
-    @patch("soundfile.read")
-    def test_dataset_returns_dict_with_all_modalities(
-        self,
-        mock_sf_read,
-        mock_annos_file,
-        mock_audio_dir,
-        mock_img_dir,
-        mock_audio_waveform,
-    ):
-        mock_sf_read.return_value = (mock_audio_waveform.numpy().squeeze(), 16000)
+    def test_dataset_returns_dict_with_all_modalities(self, test_data_dir):
         dataset = DOLOSDataset(
-            annotations_file=mock_annos_file,
-            audio_dir=mock_audio_dir,
-            img_dir=mock_img_dir,
+            annotations_file=test_data_dir["annotations_file"],
+            audio_dir=test_data_dir["audio_dir"],
+            img_dir=test_data_dir["img_dir"],
             use_mock_text=True,
         )
         item = dataset[0]
@@ -96,20 +68,11 @@ class TestDOLOSDataset:
         assert item["video"].shape[0] == 16
         assert isinstance(item["text"], str)
 
-    @patch("soundfile.read")
-    def test_label_parsing(
-        self,
-        mock_sf_read,
-        mock_annos_file,
-        mock_audio_dir,
-        mock_img_dir,
-        mock_audio_waveform,
-    ):
-        mock_sf_read.return_value = (mock_audio_waveform.numpy().squeeze(), 16000)
+    def test_label_parsing(self, test_data_dir):
         dataset = DOLOSDataset(
-            annotations_file=mock_annos_file,
-            audio_dir=mock_audio_dir,
-            img_dir=mock_img_dir,
+            annotations_file=test_data_dir["annotations_file"],
+            audio_dir=test_data_dir["audio_dir"],
+            img_dir=test_data_dir["img_dir"],
             use_mock_text=True,
         )
         assert dataset[0]["label"].item() == 0
@@ -117,39 +80,21 @@ class TestDOLOSDataset:
         assert dataset[2]["label"].item() == 0
         assert dataset[3]["label"].item() == 1
 
-    @patch("soundfile.read")
-    def test_mock_text_generation(
-        self,
-        mock_sf_read,
-        mock_annos_file,
-        mock_audio_dir,
-        mock_img_dir,
-        mock_audio_waveform,
-    ):
-        mock_sf_read.return_value = (mock_audio_waveform.numpy().squeeze(), 16000)
+    def test_mock_text_generation(self, test_data_dir):
         dataset = DOLOSDataset(
-            annotations_file=mock_annos_file,
-            audio_dir=mock_audio_dir,
-            img_dir=mock_img_dir,
+            annotations_file=test_data_dir["annotations_file"],
+            audio_dir=test_data_dir["audio_dir"],
+            img_dir=test_data_dir["img_dir"],
             use_mock_text=True,
         )
         texts = [dataset[i]["text"] for i in range(len(dataset))]
         assert all(isinstance(t, str) and len(t) > 0 for t in texts)
 
-    @patch("soundfile.read")
-    def test_video_frames_shape(
-        self,
-        mock_sf_read,
-        mock_annos_file,
-        mock_audio_dir,
-        mock_img_dir,
-        mock_audio_waveform,
-    ):
-        mock_sf_read.return_value = (mock_audio_waveform.numpy().squeeze(), 16000)
+    def test_video_frames_shape(self, test_data_dir):
         dataset = DOLOSDataset(
-            annotations_file=mock_annos_file,
-            audio_dir=mock_audio_dir,
-            img_dir=mock_img_dir,
+            annotations_file=test_data_dir["annotations_file"],
+            audio_dir=test_data_dir["audio_dir"],
+            img_dir=test_data_dir["img_dir"],
             num_frames=16,
             frame_size=224,
             use_mock_text=True,
@@ -157,16 +102,7 @@ class TestDOLOSDataset:
         item = dataset[0]
         assert item["video"].shape == (16, 3, 224, 224)
 
-    @patch("soundfile.read")
-    def test_custom_texts_passed_through(
-        self,
-        mock_sf_read,
-        mock_annos_file,
-        mock_audio_dir,
-        mock_img_dir,
-        mock_audio_waveform,
-    ):
-        mock_sf_read.return_value = (mock_audio_waveform.numpy().squeeze(), 16000)
+    def test_custom_texts_passed_through(self, test_data_dir):
         custom_texts = [
             "custom text 1",
             "custom text 2",
@@ -174,9 +110,9 @@ class TestDOLOSDataset:
             "custom text 4",
         ]
         dataset = DOLOSDataset(
-            annotations_file=mock_annos_file,
-            audio_dir=mock_audio_dir,
-            img_dir=mock_img_dir,
+            annotations_file=test_data_dir["annotations_file"],
+            audio_dir=test_data_dir["audio_dir"],
+            img_dir=test_data_dir["img_dir"],
             texts=custom_texts,
             use_mock_text=False,
         )
