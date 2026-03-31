@@ -65,11 +65,11 @@ data:
 
 paths:
   data_dir: data/DOLOS
-  video_dir: data/DOLOS/videos
+  video_dir: data/DOLOS/videos/
   image_dir: data/DOLOS/face_frames/
   audio_dir: data/DOLOS/audio_files/
   text_dir: data/DOLOS/transcripts
-  annotations: data/DOLOS/annotations.csv
+  annotations: data/DOLOS/dolos_timestamps.csv
   timestamps: data/DOLOS/dolos_timestamps.csv
   checkpoint_dir: checkpoints
   log_dir: logs
