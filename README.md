@@ -135,8 +135,8 @@ M2D2_Multimodal_Deception_Detection/
 - [ ] Implement ASR transcription module (src/data/asr.py) - Whisper integration
 - [ ] Implement text preprocessing (src/data/text_utils.py) - BERT tokenization, max len 512
 - [x] Implement data transforms/augmentations (src/utils/augmentations.py)
-- [ ] Create DataLoader with stratified splits (src/data/loaders.py)
-- [ ] Write unit tests for data loading pipeline
+- [x] Create DataLoader with stratified splits (src/data/loaders.py)
+- [x] Write unit tests for data loading pipeline
 
 ### Phase 3: Models
 
