@@ -2,7 +2,7 @@
 import torch
 import torch.nn as nn
 import torchaudio
-from models.adapter import w2v2_adapter_nlp, w2v2_adapter_conv
+from src.models.adapter import w2v2_adapter_nlp, w2v2_adapter_conv
 
 
 class W2V2_Model(nn.Module):

@@ -3,13 +3,13 @@ import torch
 import torch.nn as nn
 import torchaudio
 import torchvision
-from models.adapter import (
+from src.models.adapter import (
     w2v2_adapter_nlp,
     w2v2_adapter_conv,
     vit_adapter_nlp,
     vit_adapter_conv,
 )
-from models.visual_model import cnn_face
+from src.models.visual_model import cnn_face
 from torch.nn import functional as F
 
 

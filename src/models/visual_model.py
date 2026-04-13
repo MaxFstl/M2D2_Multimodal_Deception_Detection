@@ -3,7 +3,7 @@
 import torch
 import torch.nn as nn
 import torchvision
-from models.adapter import vit_adapter_conv, vit_adapter_nlp
+from src.models.adapter import vit_adapter_conv, vit_adapter_nlp
 
 
 class conv2d_block(nn.Module):
