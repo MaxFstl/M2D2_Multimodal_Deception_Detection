@@ -25,7 +25,6 @@ DATA_DIR = r"../../data/DOLOS/txt_files/txt_LV3"
 MODEL_NAME = "bert-base-uncased"
 OUTPUT_DIR = "../models/bert_lie_truth_lora"
 
-# 1. 读数据并打标签
 texts = []
 labels = []  # 0 = truth, 1 = lie
 
@@ -79,25 +78,22 @@ class TextDataset(Dataset):
 train_dataset = TextDataset(X_train, y_train, tokenizer)
 val_dataset = TextDataset(X_val, y_val, tokenizer)
 
-# 2. 基础模型
 base_model = BertForSequenceClassification.from_pretrained(
     MODEL_NAME,
     num_labels=2
 )
 
-# 3. 配置 LoRA
 lora_config = LoraConfig(
-    task_type=TaskType.SEQ_CLS,  # 序列分类
-    r=8,                         # rank，8 对你这个规模足够
+    task_type=TaskType.SEQ_CLS,
+    r=8,
     lora_alpha=16,
     lora_dropout=0.1,
-    target_modules=["query", "value"]  # 对 attention 的 q,v 做 LoRA
+    target_modules=["query", "value"]
 )
 
 model = get_peft_model(base_model, lora_config)
-model.print_trainable_parameters()  # 可看到只训练少量参数
+model.print_trainable_parameters()
 
-# 4. 评估函数
 def compute_metrics(eval_pred):
     logits, labels = eval_pred
     preds = np.argmax(logits, axis=-1)
@@ -112,17 +108,15 @@ def compute_metrics(eval_pred):
         "f1": f1,
     }
 
-# 5. 训练参数（针对 4080 + LoRA）
-
 training_args = TrainingArguments(
     output_dir=OUTPUT_DIR,
     num_train_epochs=50,
     per_device_train_batch_size=16,
     per_device_eval_batch_size=32,
-    learning_rate=2e-4,   # 如果不用 LoRA，可以改回 2e-5
+    learning_rate=2e-4,
     weight_decay=0.01,
     logging_steps=10,
-    fp16=True,            # 如果这里也报错，就把这一行也删掉
+    fp16=True,
 )
 
 
@@ -137,7 +131,6 @@ trainer = Trainer(
 
 trainer.train()
 
-# 只保存 LoRA + base 模型权重
 trainer.save_model(OUTPUT_DIR)
 tokenizer.save_pretrained(OUTPUT_DIR)
 print(f"LoRA model saved to {OUTPUT_DIR}")
