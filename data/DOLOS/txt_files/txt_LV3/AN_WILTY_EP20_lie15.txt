@@ -1,0 +1,1 @@
+ if I am heading north, and blue if I'm heading south. Or, if I'm heading west, I also go for blue. I'm going east.

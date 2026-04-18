@@ -1,0 +1,82 @@
+model:
+  name: M2D2
+  visual_encoder: vit_base_patch16_224
+  audio_encoder: wav2vec2_base
+  text_encoder: bert_base
+  hidden_dim: 768
+  num_heads: 4
+  dropout: 0.1
+  adapter:
+    hidden_dim: 64
+    num_temporal_tokens: 8
+
+training:
+  batch_size: 16
+  num_epochs: 30
+  learning_rate: 0.0001
+  weight_decay: 0.01
+  warmup_ratio: 0.1
+  gradient_clip: 1.0
+  early_stopping:
+    patience: 5
+    min_delta: 0.001
+  class_weights: [1.0, 1.5] # [truthful, deceptive]
+
+augmentation:
+  video:
+    horizontal_flip: 0.5
+    color_jitter: [0.2, 0.2, 0.2, 0.1]
+    random_erasing_prob: 0.0
+    random_erasing_scale: [0.02, 0.2]
+    random_rotation: 15
+    apply_prob: 0.5
+  audio:
+    noise_factor: 0.005
+    time_stretch_min: 0.9
+    time_stretch_max: 1.1
+    pitch_shift_steps: 2
+    volume_perturb_db: 2.0
+    noise_prob: 0.5
+    time_stretch_prob: 0.25
+    pitch_shift_prob: 0.25
+    volume_prob: 0.5
+    apply_prob: 0.5
+
+data:
+  dataset: DOLOS
+  train_split: 0.7
+  val_split: 0.15
+  test_split: 0.15
+  modalities: [video, audio, text]
+  video:
+    fps: 30
+    num_frames: 16
+    resize: [224, 224]
+    normalize_mean: [0.485, 0.456, 0.406]
+    normalize_std: [0.229, 0.224, 0.225]
+  audio:
+    sample_rate: 16000
+    duration: 5.0
+    n_fft: 400
+    n_mels: 80
+  text:
+    max_length: 512
+    truncation: true
+
+paths:
+  data_dir: data/DOLOS
+  video_dir: data/DOLOS/videos/
+  image_dir: data/DOLOS/face_frames/
+  audio_dir: data/DOLOS/audio_files/
+  text_dir: data/DOLOS/transcripts
+  annotations: data/DOLOS/dolos_timestamps.csv
+  timestamps: data/DOLOS/dolos_timestamps.csv
+  checkpoint_dir: checkpoints
+  log_dir: logs
+
+logging:
+  level: INFO
+  log_interval: 10
+  save_interval: 1
+
+seed: 42

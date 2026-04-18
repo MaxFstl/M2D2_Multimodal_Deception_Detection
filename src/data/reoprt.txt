@@ -1,0 +1,1030 @@
+D:\dong\project\env\virtual_envs\envs\labnew\python.exe "E:\工作目录\大学\daai\class\semester_2\7065_Innovative_Laboratory\group project\newest\M2D2_Multimodal_Deception_Detection-main\scripts\verified_whisperM_whisperLV3.py"
+TXT files only in A: set()
+TXT files only in B: set()
+[DIFFERENT] AN_WILTY_EP15_lie10.txt
+--- begin compared: AN_WILTY_EP15_lie10.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP15_lie10.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP15_lie10.txt
+@@ -1 +1 @@
+- I have two favourite castles in there because castles I discovered as a child.
++ I have two favorite castles in there because castles I discovered as a child
+--- file AN_WILTY_EP15_lie10.txt compared finish ---
+
+[DIFFERENT] AN_WILTY_EP15_lie11.txt
+--- begin compared: AN_WILTY_EP15_lie11.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP15_lie11.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP15_lie11.txt
+@@ -1 +1 @@
+- Swansea and that's called Oystermouth.
++ Swansea and that's called oyster mouth
+--- file AN_WILTY_EP15_lie11.txt compared finish ---
+
+[SAME] AN_WILTY_EP15_lie12.txt
+[DIFFERENT] AN_WILTY_EP15_lie13.txt
+--- begin compared: AN_WILTY_EP15_lie13.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP15_lie13.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP15_lie13.txt
+@@ -1 +1 @@
+- It's quite a sort of traditional old-fashioned castle with a moat and...
++ it's quite a sort of traditional old-fashioned castle with a with a moat and
+--- file AN_WILTY_EP15_lie13.txt compared finish ---
+
+[DIFFERENT] AN_WILTY_EP15_lie14.txt
+--- begin compared: AN_WILTY_EP15_lie14.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP15_lie14.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP15_lie14.txt
+@@ -1 +1 @@
+- It has always been irritating to me that very few castles...
++ It has always been irritating to me that very few castles compete with each other.
+--- file AN_WILTY_EP15_lie14.txt compared finish ---
+
+[DIFFERENT] AN_WILTY_EP15_lie15.txt
+--- begin compared: AN_WILTY_EP15_lie15.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP15_lie15.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP15_lie15.txt
+@@ -1 +1 @@
+- My character is supposed to have spent years working in the bar.
++ character is supposed to have spent years working in the bar
+--- file AN_WILTY_EP15_lie15.txt compared finish ---
+
+[SAME] AN_WILTY_EP15_lie16.txt
+[DIFFERENT] AN_WILTY_EP15_lie17.txt
+--- begin compared: AN_WILTY_EP15_lie17.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP15_lie17.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP15_lie17.txt
+@@ -1 +1 @@
+- evidently eight years I've only been there for a year and a half and it's just an induction thing so automatically
++ evidently eight years. I've only been there for a year and a half and it's just an induction thing.
+--- file AN_WILTY_EP15_lie17.txt compared finish ---
+
+[SAME] AN_WILTY_EP15_lie18.txt
+[SAME] AN_WILTY_EP15_lie19.txt
+[DIFFERENT] AN_WILTY_EP15_lie4.txt
+--- begin compared: AN_WILTY_EP15_lie4.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP15_lie4.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP15_lie4.txt
+@@ -1 +1 @@
+- No, you don't crush it. No, well, I mean, this was the 60s. You didn't want...
++ No, you don't crush it. No, well, I mean, this was the 60s.
+--- file AN_WILTY_EP15_lie4.txt compared finish ---
+
+[DIFFERENT] AN_WILTY_EP15_lie5.txt
+--- begin compared: AN_WILTY_EP15_lie5.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP15_lie5.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP15_lie5.txt
+@@ -1 +1 @@
+- Yeah, the main item then in the 60s, for some strange reason, in half...
++ But the main item then in the 60s, for some strange reason, in Harvard...
+--- file AN_WILTY_EP15_lie5.txt compared finish ---
+
+[DIFFERENT] AN_WILTY_EP15_truth1.txt
+--- begin compared: AN_WILTY_EP15_truth1.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP15_truth1.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP15_truth1.txt
+@@ -1 +1 @@
+- Most of the time I'd get the answer before the clock started.
++ most of the time I'd get the answer before the clock started.
+--- file AN_WILTY_EP15_truth1.txt compared finish ---
+
+[DIFFERENT] AN_WILTY_EP15_truth2.txt
+--- begin compared: AN_WILTY_EP15_truth2.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP15_truth2.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP15_truth2.txt
+@@ -1 +1 @@
+- I used to do, I used to get my pen that I would write on the board with and I used to go round all the pro-
++ used to do i used to get my pen that i would write on the board with and i used to go around all the
+--- file AN_WILTY_EP15_truth2.txt compared finish ---
+
+[SAME] AN_WILTY_EP15_truth20.txt
+[SAME] AN_WILTY_EP15_truth21.txt
+[SAME] AN_WILTY_EP15_truth22.txt
+[DIFFERENT] AN_WILTY_EP15_truth23.txt
+--- begin compared: AN_WILTY_EP15_truth23.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP15_truth23.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP15_truth23.txt
+@@ -1 +1 @@
+- back because I need to get a hammer to give it a whack. And as I went back, I said, I thought it would be funny to say, don't worry, I'm not going to kill you.
++ because I need to get a hammer to give it a whack. And as I went back, I thought it would be funny to say, don't worry, I'm not going to kill you.
+--- file AN_WILTY_EP15_truth23.txt compared finish ---
+
+[DIFFERENT] AN_WILTY_EP15_truth24.txt
+--- begin compared: AN_WILTY_EP15_truth24.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP15_truth24.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP15_truth24.txt
+@@ -1 +1 @@
+- I was walking past the front of the car with the engine, I looked at him like that, and I just saw him go like that. He just wiped a small tear from his eye because I think he genuinely thought.
++ I was walking past the front of the car with the engine. I looked in like that, and I just saw him go like that. And he just wiped a small tear from his eye, because I think he genuinely thought...
+--- file AN_WILTY_EP15_truth24.txt compared finish ---
+
+[DIFFERENT] AN_WILTY_EP15_truth3.txt
+--- begin compared: AN_WILTY_EP15_truth3.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP15_truth3.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP15_truth3.txt
+@@ -1 +1 @@
+- I used to run a market stall that only sold hats for d***
++ I used to run a market stall that only sold hats for
+--- file AN_WILTY_EP15_truth3.txt compared finish ---
+
+[DIFFERENT] AN_WILTY_EP15_truth6.txt
+--- begin compared: AN_WILTY_EP15_truth6.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP15_truth6.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP15_truth6.txt
+@@ -1 +1 @@
+- and stuff like that. I didn't want to cut my hair out of greasy hair. So I thought, hang on, I can't ask mum for like a hairnet. So I'll just wax.
++ and stuff like that. I didn't want to cut my hair, greasy hair. So I thought, hang on, I can't ask mum for like a hairnet, so I'll just wax some...
+--- file AN_WILTY_EP15_truth6.txt compared finish ---
+
+[DIFFERENT] AN_WILTY_EP15_truth7.txt
+--- begin compared: AN_WILTY_EP15_truth7.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP15_truth7.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP15_truth7.txt
+@@ -1 +1 @@
+- about that and the doctor said in no way will that get...
++ chat about that and the doctor said in no way will that get
+--- file AN_WILTY_EP15_truth7.txt compared finish ---
+
+[DIFFERENT] AN_WILTY_EP15_truth8.txt
+--- begin compared: AN_WILTY_EP15_truth8.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP15_truth8.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP15_truth8.txt
+@@ -1 +1 @@
+- When I was about seven seven seven
++ When I was about seven. Seven?
+--- file AN_WILTY_EP15_truth8.txt compared finish ---
+
+[DIFFERENT] AN_WILTY_EP15_truth9.txt
+--- begin compared: AN_WILTY_EP15_truth9.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP15_truth9.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP15_truth9.txt
+@@ -1 +1 @@
+- Because I lived in the country and ooh, there's pond.
++ pond because i lived in the country and oh there's pot
+--- file AN_WILTY_EP15_truth9.txt compared finish ---
+
+[SAME] AN_WILTY_EP16_lie1.txt
+[SAME] AN_WILTY_EP16_lie17.txt
+[DIFFERENT] AN_WILTY_EP16_lie18.txt
+--- begin compared: AN_WILTY_EP16_lie18.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP16_lie18.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP16_lie18.txt
+@@ -1 +1 @@
+- godson of some friends of mine.
++ the godson of some friends of mine.
+--- file AN_WILTY_EP16_lie18.txt compared finish ---
+
+[DIFFERENT] AN_WILTY_EP16_lie19.txt
+--- begin compared: AN_WILTY_EP16_lie19.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP16_lie19.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP16_lie19.txt
+@@ -1 +1 @@
+- Last year I was ordered to leave Blackpool Tower after I threw a sausage roll off the
++ Last year, I was ordered to leave Blackpool Tower after I threw a sausage roll off the...
+--- file AN_WILTY_EP16_lie19.txt compared finish ---
+
+[SAME] AN_WILTY_EP16_lie2.txt
+[DIFFERENT] AN_WILTY_EP16_lie20.txt
+--- begin compared: AN_WILTY_EP16_lie20.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP16_lie20.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP16_lie20.txt
+@@ -1 +1 @@
+- Well because I'm a northern I just thought the bins
++ Well because I'm northern I just thought the bins
+--- file AN_WILTY_EP16_lie20.txt compared finish ---
+
+[DIFFERENT] AN_WILTY_EP16_lie21.txt
+--- begin compared: AN_WILTY_EP16_lie21.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP16_lie21.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP16_lie21.txt
+@@ -1 +1 @@
+- I already had one. This is my second. I was halfway through it and I thought, no more for me.
++ I had one. This is my second. I was halfway through it and I thought, no more for me.
+--- file AN_WILTY_EP16_lie21.txt compared finish ---
+
+[DIFFERENT] AN_WILTY_EP16_lie3.txt
+--- begin compared: AN_WILTY_EP16_lie3.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP16_lie3.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP16_lie3.txt
+@@ -1 +1 @@
+- that will enable him to be, you know, recognizable yet dignified to potentially
++ that will enable him to be you know recognizable yet dignified to potential
+--- file AN_WILTY_EP16_lie3.txt compared finish ---
+
+[SAME] AN_WILTY_EP16_lie4.txt
+[DIFFERENT] AN_WILTY_EP16_lie5.txt
+--- begin compared: AN_WILTY_EP16_lie5.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP16_lie5.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP16_lie5.txt
+@@ -1 +1 @@
+- like the name delicious commands great respect in the gala.
++ like the name delicious commands great respect in the ghetto.
+--- file AN_WILTY_EP16_lie5.txt compared finish ---
+
+[DIFFERENT] AN_WILTY_EP16_lie6.txt
+--- begin compared: AN_WILTY_EP16_lie6.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP16_lie6.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP16_lie6.txt
+@@ -1 +1 @@
+- You uh, you probably don't listen to much rap music, do you?
++ You probably don't listen to much rap music, do you?
+--- file AN_WILTY_EP16_lie6.txt compared finish ---
+
+[SAME] AN_WILTY_EP16_lie7.txt
+[DIFFERENT] AN_WILTY_EP16_truth10.txt
+--- begin compared: AN_WILTY_EP16_truth10.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP16_truth10.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP16_truth10.txt
+@@ -1 +1 @@
+- I don't think they were real sweets. They were probably like fake big
++ a mini cooper i don't think they were real sweets they were probably like fake big
+--- file AN_WILTY_EP16_truth10.txt compared finish ---
+
+[SAME] AN_WILTY_EP16_truth11.txt
+[DIFFERENT] AN_WILTY_EP16_truth12.txt
+--- begin compared: AN_WILTY_EP16_truth12.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP16_truth12.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP16_truth12.txt
+@@ -1 +1 @@
+- I was the first person in the world to breed the Congolese frog Hymenochiris curtopi.
++ I was the first person in the world to breed the Congolese frog Hymenocyrus curtipes.
+--- file AN_WILTY_EP16_truth12.txt compared finish ---
+
+[DIFFERENT] AN_WILTY_EP16_truth13.txt
+--- begin compared: AN_WILTY_EP16_truth13.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP16_truth13.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP16_truth13.txt
+@@ -1 +1 @@
+- They are the only frog I know that has a prehens-
++ They are the only frog I know that has a prehensile.
+--- file AN_WILTY_EP16_truth13.txt compared finish ---
+
+[DIFFERENT] AN_WILTY_EP16_truth14.txt
+--- begin compared: AN_WILTY_EP16_truth14.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP16_truth14.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP16_truth14.txt
+@@ -1 +1 @@
+- Everybody else had kept them in tanks with an aerator, which bubbled away. And with the prehensile ane...
++ Everybody else had kept them in tanks with an aerator, which bubbled away.
+--- file AN_WILTY_EP16_truth14.txt compared finish ---
+
+[SAME] AN_WILTY_EP16_truth15.txt
+[DIFFERENT] AN_WILTY_EP16_truth16.txt
+--- begin compared: AN_WILTY_EP16_truth16.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP16_truth16.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP16_truth16.txt
+@@ -1 +1 @@
+- We were in a prog rock band called Aragon and we recorded an album called...
++ were in a prog rock band called Aragon, and we recorded an album called...
+--- file AN_WILTY_EP16_truth16.txt compared finish ---
+
+[DIFFERENT] AN_WILTY_EP16_truth22.txt
+--- begin compared: AN_WILTY_EP16_truth22.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP16_truth22.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP16_truth22.txt
+@@ -1 +1 @@
+- As a child at my grandparents house, I had a little bell that I would ring if I wanted a...
++ As a child, at my grandparents' house, I had a little bell that I would ring if I wanted
+--- file AN_WILTY_EP16_truth22.txt compared finish ---
+
+[SAME] AN_WILTY_EP16_truth23.txt
+[DIFFERENT] AN_WILTY_EP16_truth24.txt
+--- begin compared: AN_WILTY_EP16_truth24.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP16_truth24.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP16_truth24.txt
+@@ -1 +1 @@
+- More chips A glass of orange squash sense of purpose
++ More chips Glass of orange squash sense of purpose
+--- file AN_WILTY_EP16_truth24.txt compared finish ---
+
+[DIFFERENT] AN_WILTY_EP16_truth25.txt
+--- begin compared: AN_WILTY_EP16_truth25.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP16_truth25.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP16_truth25.txt
+@@ -1 +1 @@
+- That's a remarkable impression because it has the advantage of also sounding quite a lot like Ken Livingston.
++ That's a remarkable impression, because it has the advantage of also sounding quite a lot like Ken Livingstone.
+--- file AN_WILTY_EP16_truth25.txt compared finish ---
+
+[DIFFERENT] AN_WILTY_EP16_truth26.txt
+--- begin compared: AN_WILTY_EP16_truth26.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP16_truth26.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP16_truth26.txt
+@@ -1 +1 @@
+- I take it absolutely everywhere with me because I can't stand a co-
++ cosy. I take it absolutely everywhere with me because I can't stand a
+--- file AN_WILTY_EP16_truth26.txt compared finish ---
+
+[DIFFERENT] AN_WILTY_EP16_truth8.txt
+--- begin compared: AN_WILTY_EP16_truth8.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP16_truth8.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP16_truth8.txt
+@@ -1 +1 @@
+- I once guessed the exact number of sweets in a Mini Cooper and was awarded a prize by Britain's top-
++ I once guessed the exact number of sweets in a Mini Cooper and was awarded a prize by Britain's Torch.
+--- file AN_WILTY_EP16_truth8.txt compared finish ---
+
+[SAME] AN_WILTY_EP17_lie1.txt
+[DIFFERENT] AN_WILTY_EP17_lie13.txt
+--- begin compared: AN_WILTY_EP17_lie13.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP17_lie13.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP17_lie13.txt
+@@ -1 +1 @@
+- I read 1984 from cover to cover in WH Smith so I didn't have to buy
++ I read 1984 from cover to cover in WH Smith, so I didn't have to buy it.
+--- file AN_WILTY_EP17_lie13.txt compared finish ---
+
+[SAME] AN_WILTY_EP17_lie14.txt
+[DIFFERENT] AN_WILTY_EP17_lie15.txt
+--- begin compared: AN_WILTY_EP17_lie15.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP17_lie15.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP17_lie15.txt
+@@ -1 +1 @@
+- badly paid? It was quite badly paid but you know I dare say I could have stretched
++ badly paid it was quite badly paid by you know I guess I could have stretched
+--- file AN_WILTY_EP17_lie15.txt compared finish ---
+
+[DIFFERENT] AN_WILTY_EP17_lie16.txt
+--- begin compared: AN_WILTY_EP17_lie16.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP17_lie16.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP17_lie16.txt
+@@ -1 +1 @@
+- Well, this is some of my hair collection.
++ Well, this is some of my hair collection
+--- file AN_WILTY_EP17_lie16.txt compared finish ---
+
+[DIFFERENT] AN_WILTY_EP17_lie17.txt
+--- begin compared: AN_WILTY_EP17_lie17.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP17_lie17.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP17_lie17.txt
+@@ -1 +1 @@
+- I gathered from guests who appeared.
++ I've gathered from guests who appeared
+--- file AN_WILTY_EP17_lie17.txt compared finish ---
+
+[SAME] AN_WILTY_EP17_lie18.txt
+[DIFFERENT] AN_WILTY_EP17_lie19.txt
+--- begin compared: AN_WILTY_EP17_lie19.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP17_lie19.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP17_lie19.txt
+@@ -1 +1 @@
+- I mean, you have to... It just... It kind of sheds.
++ you after it just kind of sheds.
+--- file AN_WILTY_EP17_lie19.txt compared finish ---
+
+[SAME] AN_WILTY_EP17_lie8.txt
+[SAME] AN_WILTY_EP17_lie9.txt
+[DIFFERENT] AN_WILTY_EP17_truth10.txt
+--- begin compared: AN_WILTY_EP17_truth10.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP17_truth10.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP17_truth10.txt
+@@ -1 +1 @@
+- They just thought we would sort of dress like the description of a...
++ They just thought we were sort of dressed like the description of a...
+--- file AN_WILTY_EP17_truth10.txt compared finish ---
+
+[DIFFERENT] AN_WILTY_EP17_truth11.txt
+--- begin compared: AN_WILTY_EP17_truth11.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP17_truth11.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP17_truth11.txt
+@@ -1 +1 @@
+- It was in the city centre and we were walking down the road, next thing you know these four police cars...
++ It was in the city centre. And, um, what does he do? We're walking down the road. Next thing you know, these four police cars...
+--- file AN_WILTY_EP17_truth11.txt compared finish ---
+
+[SAME] AN_WILTY_EP17_truth12.txt
+[DIFFERENT] AN_WILTY_EP17_truth3.txt
+--- begin compared: AN_WILTY_EP17_truth3.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP17_truth3.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP17_truth3.txt
+@@ -1 +1 @@
+- early 90s house music.
++ so, you know, early 90s house music.
+--- file AN_WILTY_EP17_truth3.txt compared finish ---
+
+[SAME] AN_WILTY_EP17_truth4.txt
+[DIFFERENT] AN_WILTY_EP17_truth5.txt
+--- begin compared: AN_WILTY_EP17_truth5.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP17_truth5.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP17_truth5.txt
+@@ -1 +1 @@
+- I'm now a sort of moderately plump man in my mid-30s. It doesn't have quite the same
++ I'm now a sort of moderately plump man in my mid-thirties. It doesn't have quite the same...
+--- file AN_WILTY_EP17_truth5.txt compared finish ---
+
+[DIFFERENT] AN_WILTY_EP17_truth6.txt
+--- begin compared: AN_WILTY_EP17_truth6.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP17_truth6.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP17_truth6.txt
+@@ -1 +1 @@
+- I worked for nine months on an oil rig doing four weeks on and in the two weeks off. I would go
++ I worked for nine months on an oil rig doing four weeks on and in the two weeks off I would go
+--- file AN_WILTY_EP17_truth6.txt compared finish ---
+
+[DIFFERENT] AN_WILTY_EP17_truth7.txt
+--- begin compared: AN_WILTY_EP17_truth7.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP17_truth7.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP17_truth7.txt
+@@ -1 +1 @@
+- Police who mistook us both for dual-fee.
++ Police who mistook us both for dual fee.
+--- file AN_WILTY_EP17_truth7.txt compared finish ---
+
+[DIFFERENT] AN_WILTY_EP18_lie10.txt
+--- begin compared: AN_WILTY_EP18_lie10.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP18_lie10.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP18_lie10.txt
+@@ -1 +1 @@
+- your own image? I do remember designing big legs because I wanted him to be a fast runner.
++ your own image i do remember designing big legs because i wanted him to be a fast runner
+--- file AN_WILTY_EP18_lie10.txt compared finish ---
+
+[DIFFERENT] AN_WILTY_EP18_lie11.txt
+--- begin compared: AN_WILTY_EP18_lie11.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP18_lie11.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP18_lie11.txt
+@@ -1 +1 @@
+- What was on to it? I'm afraid to say it was Richard and Judy.
++ What was on there? I'm afraid to say it was Richard and Judy.
+--- file AN_WILTY_EP18_lie11.txt compared finish ---
+
+[DIFFERENT] AN_WILTY_EP18_lie12.txt
+--- begin compared: AN_WILTY_EP18_lie12.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP18_lie12.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP18_lie12.txt
+@@ -1 +1 @@
+- of the fact that sometimes I was at home and...
++ the fact that sometimes I was at home and I...
+--- file AN_WILTY_EP18_lie12.txt compared finish ---
+
+[DIFFERENT] AN_WILTY_EP18_lie14.txt
+--- begin compared: AN_WILTY_EP18_lie14.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP18_lie14.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP18_lie14.txt
+@@ -1 +1 @@
+- joined our class and they were just got engaged and they wanted to tone pre-wedding
++ joined our class and they just got engaged and they wanted to tone pre-wed
+--- file AN_WILTY_EP18_lie14.txt compared finish ---
+
+[SAME] AN_WILTY_EP18_lie15.txt
+[DIFFERENT] AN_WILTY_EP18_lie16.txt
+--- begin compared: AN_WILTY_EP18_lie16.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP18_lie16.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP18_lie16.txt
+@@ -1 +1 @@
+- and into Down the Dog which is always amusing.
++ and into downward dog, which is always amusing.
+--- file AN_WILTY_EP18_lie16.txt compared finish ---
+
+[SAME] AN_WILTY_EP18_lie17.txt
+[DIFFERENT] AN_WILTY_EP18_lie18.txt
+--- begin compared: AN_WILTY_EP18_lie18.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP18_lie18.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP18_lie18.txt
+@@ -1 +1 @@
+- The fiance, he said very earnestly, and there she...
++ The fiancé, he said very earnestly, and there she...
+--- file AN_WILTY_EP18_lie18.txt compared finish ---
+
+[SAME] AN_WILTY_EP18_lie20.txt
+[DIFFERENT] AN_WILTY_EP18_lie21.txt
+--- begin compared: AN_WILTY_EP18_lie21.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP18_lie21.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP18_lie21.txt
+@@ -1 +1 @@
+- It was just, there was just a group of us went to this nightclub, you know, on a Saturday night I think.
++ It was just, there was just a group of us, went to this nightclub, you know, on a Saturday night I think.
+--- file AN_WILTY_EP18_lie21.txt compared finish ---
+
+[SAME] AN_WILTY_EP18_lie22.txt
+[SAME] AN_WILTY_EP18_lie6.txt
+[DIFFERENT] AN_WILTY_EP18_lie7.txt
+--- begin compared: AN_WILTY_EP18_lie7.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP18_lie7.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP18_lie7.txt
+@@ -1 +1 @@
+- a sort of a zoo, more than a menagerie.
++ as a sort of a, I wouldn't call it a zoo, more than a menagerie.
+--- file AN_WILTY_EP18_lie7.txt compared finish ---
+
+[DIFFERENT] AN_WILTY_EP18_lie8.txt
+--- begin compared: AN_WILTY_EP18_lie8.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP18_lie8.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP18_lie8.txt
+@@ -1 +1 @@
+- in my hand because I had actually for once paid for something.
++ it in my hand because I had actually for once paid for something on
+--- file AN_WILTY_EP18_lie8.txt compared finish ---
+
+[SAME] AN_WILTY_EP18_lie9.txt
+[DIFFERENT] AN_WILTY_EP18_truth1.txt
+--- begin compared: AN_WILTY_EP18_truth1.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP18_truth1.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP18_truth1.txt
+@@ -1 +1 @@
+- Good. I once put nail polish remover in my fish tank to give my goldfish
++ Good. I once put nail polish remover in my fish tank to give my goldfish...
+--- file AN_WILTY_EP18_truth1.txt compared finish ---
+
+[SAME] AN_WILTY_EP18_truth13.txt
+[DIFFERENT] AN_WILTY_EP18_truth19.txt
+--- begin compared: AN_WILTY_EP18_truth19.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP18_truth19.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP18_truth19.txt
+@@ -1 +1 @@
+- birthday party and came home and said I saw a juggler it was the best thing I've ever seen I wish
++ at a birthday party and came home and said, I saw a juggler. It was the best thing I've ever seen.
+--- file AN_WILTY_EP18_truth19.txt compared finish ---
+
+[DIFFERENT] AN_WILTY_EP18_truth2.txt
+--- begin compared: AN_WILTY_EP18_truth2.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP18_truth2.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP18_truth2.txt
+@@ -1 +1 @@
+- whole bottle in I just put a tiny just a little bit just to give them a bit more
++ whole bottle in i just put a tiny just a little bit just to give them a bit more
+--- file AN_WILTY_EP18_truth2.txt compared finish ---
+
+[DIFFERENT] AN_WILTY_EP18_truth23.txt
+--- begin compared: AN_WILTY_EP18_truth23.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP18_truth23.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP18_truth23.txt
+@@ -1 +1 @@
+- I once put out a fire using my
++ I once put out a fire using my...
+--- file AN_WILTY_EP18_truth23.txt compared finish ---
+
+[DIFFERENT] AN_WILTY_EP18_truth3.txt
+--- begin compared: AN_WILTY_EP18_truth3.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP18_truth3.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP18_truth3.txt
+@@ -1 +1 @@
+- Because I just thought I thought they were looking a bit sleepy and they
++ Because I just thought, I thought they were looking a bit sleepy.
+--- file AN_WILTY_EP18_truth3.txt compared finish ---
+
+[DIFFERENT] AN_WILTY_EP18_truth4.txt
+--- begin compared: AN_WILTY_EP18_truth4.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP18_truth4.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP18_truth4.txt
+@@ -1 +1 @@
+- under the bed and then come up and go weave through the the the the green the pond life the water
++ under the bed and then come up and go weave through the green, the pond life, the water.
+--- file AN_WILTY_EP18_truth4.txt compared finish ---
+
+[SAME] AN_WILTY_EP18_truth5.txt
+[DIFFERENT] AN_WILTY_EP19_lie1.txt
+--- begin compared: AN_WILTY_EP19_lie1.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP19_lie1.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP19_lie1.txt
+@@ -1 +1 @@
+- Okay. Anton, Dubek and I danced our way
++ you law okay Anton to back and I danced our way
+--- file AN_WILTY_EP19_lie1.txt compared finish ---
+
+[DIFFERENT] AN_WILTY_EP19_lie10.txt
+--- begin compared: AN_WILTY_EP19_lie10.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP19_lie10.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP19_lie10.txt
+@@ -1 +1 @@
+- tell me another story and it was about a bear reading stories to his little bear.
++ tell me another story and it was a bit of Bear reading stories to his little bear.
+--- file AN_WILTY_EP19_lie10.txt compared finish ---
+
+[SAME] AN_WILTY_EP19_lie11.txt
+[DIFFERENT] AN_WILTY_EP19_lie12.txt
+--- begin compared: AN_WILTY_EP19_lie12.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP19_lie12.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP19_lie12.txt
+@@ -1 +1 @@
+- Terry and he's the policeman who was called out when I was caught trying to break into the window.
++ and he's the policeman who was called out when I was caught trying to break in through the window.
+--- file AN_WILTY_EP19_lie12.txt compared finish ---
+
+[DIFFERENT] AN_WILTY_EP19_lie13.txt
+--- begin compared: AN_WILTY_EP19_lie13.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP19_lie13.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP19_lie13.txt
+@@ -1 +1 @@
+- myself out when I had a plumber around trying to un-
++ myself out when I had a plumber round trying to un-
+--- file AN_WILTY_EP19_lie13.txt compared finish ---
+
+[SAME] AN_WILTY_EP19_lie14.txt
+[DIFFERENT] AN_WILTY_EP19_lie15.txt
+--- begin compared: AN_WILTY_EP19_lie15.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP19_lie15.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP19_lie15.txt
+@@ -1 +1 @@
+- If you give me any date before the year 2000, I can instantly tell you what day
++ If you give me any date before the year 2000, I can instantly tell you what date it is.
+--- file AN_WILTY_EP19_lie15.txt compared finish ---
+
+[DIFFERENT] AN_WILTY_EP19_lie16.txt
+--- begin compared: AN_WILTY_EP19_lie16.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP19_lie16.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP19_lie16.txt
+@@ -1 +1 @@
+- The system is what you do is you actually
++ The system is, what you do is you actually
+--- file AN_WILTY_EP19_lie16.txt compared finish ---
+
+[DIFFERENT] AN_WILTY_EP19_lie17.txt
+--- begin compared: AN_WILTY_EP19_lie17.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP19_lie17.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP19_lie17.txt
+@@ -1 +1 @@
+- But I can do it right, then we're back to the sort of 1920s, 1930s.
++ But I can do it right, then we're back to the 1920s, 1930s.
+--- file AN_WILTY_EP19_lie17.txt compared finish ---
+
+[DIFFERENT] AN_WILTY_EP19_lie18.txt
+--- begin compared: AN_WILTY_EP19_lie18.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP19_lie18.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP19_lie18.txt
+@@ -1 +1 @@
+- three months in 1955, you learn it off by heart those 90 days, and then there's a calculus.
++ three months in 1955, you learn it off by heart those 90 days and then there's a calculation
+--- file AN_WILTY_EP19_lie18.txt compared finish ---
+
+[DIFFERENT] AN_WILTY_EP19_lie19.txt
+--- begin compared: AN_WILTY_EP19_lie19.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP19_lie19.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP19_lie19.txt
+@@ -1 +1 @@
+- 24, key at the door, 21, 2 and 1 is 3, Sunday's the first day Sunday...
++ 24, key of the door, 21, 2 and 1 is 3, Sunday's the first day, Sunday's the first day.
+--- file AN_WILTY_EP19_lie19.txt compared finish ---
+
+[DIFFERENT] AN_WILTY_EP19_lie2.txt
+--- begin compared: AN_WILTY_EP19_lie2.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP19_lie2.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP19_lie2.txt
+@@ -1 +1 @@
+- What dance was it? It was a little bit of a foxtrot. He's a ballroom guy, you see. And waltz was my best dance.
++ was it it was a little bit of a fox trot he's a ballroom guy you see and waltz was my best dance
+--- file AN_WILTY_EP19_lie2.txt compared finish ---
+
+[DIFFERENT] AN_WILTY_EP19_lie7.txt
+--- begin compared: AN_WILTY_EP19_lie7.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP19_lie7.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP19_lie7.txt
+@@ -1 +1 @@
+- When I was a child, I was scared that my entire life was a book being read.
++ When I was a child, I was scared that my entire life was a book being read
+--- file AN_WILTY_EP19_lie7.txt compared finish ---
+
+[DIFFERENT] AN_WILTY_EP19_lie8.txt
+--- begin compared: AN_WILTY_EP19_lie8.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP19_lie8.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP19_lie8.txt
+@@ -1 +1 @@
+- What time do you? Quite early, but then, you know, up until I was maybe seven or eight.
++ So what came to you? Quite early, but then, you know, up until I was maybe seven or eight.
+--- file AN_WILTY_EP19_lie8.txt compared finish ---
+
+[SAME] AN_WILTY_EP19_lie9.txt
+[DIFFERENT] AN_WILTY_EP19_truth20.txt
+--- begin compared: AN_WILTY_EP19_truth20.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP19_truth20.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP19_truth20.txt
+@@ -1 +1 @@
+- A Coronation Street star once made me remove all the red M&Ms from the
++ A Coronation Street star once made me remove all the red M&Ms from my hair.
+--- file AN_WILTY_EP19_truth20.txt compared finish ---
+
+[DIFFERENT] AN_WILTY_EP19_truth21.txt
+--- begin compared: AN_WILTY_EP19_truth21.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP19_truth21.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP19_truth21.txt
+@@ -1 +1 @@
+- I was working behind the scenes, which is what I used.
++ I was working behind the scenes, which is what I used to do.
+--- file AN_WILTY_EP19_truth21.txt compared finish ---
+
+[DIFFERENT] AN_WILTY_EP19_truth3.txt
+--- begin compared: AN_WILTY_EP19_truth3.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP19_truth3.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP19_truth3.txt
+@@ -1 +1 @@
+- Every Christmas, my dad makes the whole family stand up to watch the
++ Every Christmas, my dad makes the whole family stand up to watch the Christmas.
+--- file AN_WILTY_EP19_truth3.txt compared finish ---
+
+[DIFFERENT] AN_WILTY_EP19_truth4.txt
+--- begin compared: AN_WILTY_EP19_truth4.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP19_truth4.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP19_truth4.txt
+@@ -1 +1 @@
+- two brothers and sisters and then...
++ two brothers and sisters and then
+--- file AN_WILTY_EP19_truth4.txt compared finish ---
+
+[DIFFERENT] AN_WILTY_EP19_truth5.txt
+--- begin compared: AN_WILTY_EP19_truth5.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP19_truth5.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP19_truth5.txt
+@@ -1 +1 @@
+- He's living in a kind of like time warp. He's quite an old dad. And he's one of those people like, he'll buy a spam and sit in the cellar, cause he may...
++ He's living in a kind of like time warp. He's quite an old dad. And he's one of those people like he'll buy spam and sit in the cellar because he...
+--- file AN_WILTY_EP19_truth5.txt compared finish ---
+
+[DIFFERENT] AN_WILTY_EP19_truth6.txt
+--- begin compared: AN_WILTY_EP19_truth6.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP19_truth6.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP19_truth6.txt
+@@ -1 +1 @@
+- My dad sometimes into art because the those protest things where they go on the
++ My dad sometimes into art because the art those protest things where they go on the
+--- file AN_WILTY_EP19_truth6.txt compared finish ---
+
+[SAME] AN_WILTY_EP20_lie10.txt
+[DIFFERENT] AN_WILTY_EP20_lie12.txt
+--- begin compared: AN_WILTY_EP20_lie12.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP20_lie12.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP20_lie12.txt
+@@ -1 +1 @@
+- They wanted to get a masseuse because of arthritis. It's a spaniel. We've had it for seven years. So in dog years, it's about 42. So it's quite early.
++ They wanted to get a masseuse because of arthritis. It's a spaniel. We've had it for seven years, so in dog years it's about 42, so it's quite early.
+--- file AN_WILTY_EP20_lie12.txt compared finish ---
+
+[DIFFERENT] AN_WILTY_EP20_lie13.txt
+--- begin compared: AN_WILTY_EP20_lie13.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP20_lie13.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP20_lie13.txt
+@@ -1 +1 @@
+- I don't we don't know it may be indefinite
++ Uh, I don't, we don't know. It may be indefinite.
+--- file AN_WILTY_EP20_lie13.txt compared finish ---
+
+[DIFFERENT] AN_WILTY_EP20_lie14.txt
+--- begin compared: AN_WILTY_EP20_lie14.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP20_lie14.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP20_lie14.txt
+@@ -1 +1 @@
+- of the UK. I have marked every service station that I have ever visited on
++ of the UK. I have marked every service station that I have ever visited on a map.
+--- file AN_WILTY_EP20_lie14.txt compared finish ---
+
+[DIFFERENT] AN_WILTY_EP20_lie15.txt
+--- begin compared: AN_WILTY_EP20_lie15.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP20_lie15.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP20_lie15.txt
+@@ -1 +1 @@
+- if I am heading north and blue if I'm heading south or if I'm heading west I also go for blue and east
++ if I am heading north, and blue if I'm heading south. Or, if I'm heading west, I also go for blue. I'm going east.
+--- file AN_WILTY_EP20_lie15.txt compared finish ---
+
+[DIFFERENT] AN_WILTY_EP20_lie16.txt
+--- begin compared: AN_WILTY_EP20_lie16.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP20_lie16.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP20_lie16.txt
+@@ -1 +1 @@
+- I went through to the main pasty area, where I ordered my Ginster's pasty.
++ Went through to the main pasty area, where I ordered my Ginster's pasty.
+--- file AN_WILTY_EP20_lie16.txt compared finish ---
+
+[DIFFERENT] AN_WILTY_EP20_lie5.txt
+--- begin compared: AN_WILTY_EP20_lie5.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP20_lie5.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP20_lie5.txt
+@@ -1 +1 @@
+- Do I have a bomb stra-
++ Do I have a bomb-stri-
+--- file AN_WILTY_EP20_lie5.txt compared finish ---
+
+[DIFFERENT] AN_WILTY_EP20_lie6.txt
+--- begin compared: AN_WILTY_EP20_lie6.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP20_lie6.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP20_lie6.txt
+@@ -1 +1 @@
+- I am launching my own range of condiments including Omijalili Piccolilli
++ I am launching my own range of condiments including Omijalili Piccalilli.
+--- file AN_WILTY_EP20_lie6.txt compared finish ---
+
+[DIFFERENT] AN_WILTY_EP20_lie7.txt
+--- begin compared: AN_WILTY_EP20_lie7.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP20_lie7.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP20_lie7.txt
+@@ -1 +1 @@
+- happen. I said I've only done a few bit parts and a few films and they said well you're quite well known in comedy and we're trying to get this
++ I said, I've only done a few bit parts and a few films. And they said, well, you're quite well known in comedy, and we're trying to get this...
+--- file AN_WILTY_EP20_lie7.txt compared finish ---
+
+[DIFFERENT] AN_WILTY_EP20_lie8.txt
+--- begin compared: AN_WILTY_EP20_lie8.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP20_lie8.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP20_lie8.txt
+@@ -1 +1 @@
+- other products as well, Jalili chili, all kinds of...
++ other products as well Chilili Chili, all kinds of
+--- file AN_WILTY_EP20_lie8.txt compared finish ---
+
+[DIFFERENT] AN_WILTY_EP20_lie9.txt
+--- begin compared: AN_WILTY_EP20_lie9.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP20_lie9.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP20_lie9.txt
+@@ -1 +1 @@
+- They wanted me to write a book but I didn't feel I was old enough or experienced enough to write.
++ They wanted me to write a book, but I didn't feel I was old enough or experienced enough to write.
+--- file AN_WILTY_EP20_lie9.txt compared finish ---
+
+[SAME] AN_WILTY_EP20_truth1.txt
+[DIFFERENT] AN_WILTY_EP20_truth11.txt
+--- begin compared: AN_WILTY_EP20_truth11.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP20_truth11.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP20_truth11.txt
+@@ -1 +1 @@
+- Sadie came to my 60th birthday party, pretended to be a waitress so she could lick down...
++ Sadie came to my 60th birthday party, pretended to be a waitress so she could lick Daniel.
+--- file AN_WILTY_EP20_truth11.txt compared finish ---
+
+[SAME] AN_WILTY_EP20_truth2.txt
+[DIFFERENT] AN_WILTY_EP20_truth3.txt
+--- begin compared: AN_WILTY_EP20_truth3.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP20_truth3.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP20_truth3.txt
+@@ -1 +1 @@
+- I was in Bali and we were...
++ And I was in Bali and We were
+--- file AN_WILTY_EP20_truth3.txt compared finish ---
+
+[DIFFERENT] AN_WILTY_EP20_truth4.txt
+--- begin compared: AN_WILTY_EP20_truth4.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP20_truth4.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP20_truth4.txt
+@@ -1 +1 @@
+- Yeah, but I would think that if people didn't think they were...
++ Yeah, well, I would think that if people didn't think they were...
+--- file AN_WILTY_EP20_truth4.txt compared finish ---
+
+[DIFFERENT] AN_WILTY_EP21_lie1.txt
+--- begin compared: AN_WILTY_EP21_lie1.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP21_lie1.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP21_lie1.txt
+@@ -1 +1 @@
+- I have been approached by NASA to be the first man to cycle
++ I have been approached by NASA to be the first man to cycle.
+--- file AN_WILTY_EP21_lie1.txt compared finish ---
+
+[DIFFERENT] AN_WILTY_EP21_lie10.txt
+--- begin compared: AN_WILTY_EP21_lie10.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP21_lie10.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP21_lie10.txt
+@@ -1 +1 @@
+- Finally, David. This is Sylvanne, and he's my next door neighbour, and I...
++ Finally, David. This is Sylvain, and he's my next-door neighbour, and I'm...
+--- file AN_WILTY_EP21_lie10.txt compared finish ---
+
+[DIFFERENT] AN_WILTY_EP21_lie11.txt
+--- begin compared: AN_WILTY_EP21_lie11.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP21_lie11.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP21_lie11.txt
+@@ -1 +1 @@
+- After he complained about an all-night party.
++ after he complained about an all-night party.
+--- file AN_WILTY_EP21_lie11.txt compared finish ---
+
+[DIFFERENT] AN_WILTY_EP21_lie12.txt
+--- begin compared: AN_WILTY_EP21_lie12.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP21_lie12.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP21_lie12.txt
+@@ -1 +1 @@
+- OK, my time has come.
++ OK. My time is up.
+--- file AN_WILTY_EP21_lie12.txt compared finish ---
+
+[SAME] AN_WILTY_EP21_lie13.txt
+[SAME] AN_WILTY_EP21_lie14.txt
+[DIFFERENT] AN_WILTY_EP21_lie15.txt
+--- begin compared: AN_WILTY_EP21_lie15.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP21_lie15.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP21_lie15.txt
+@@ -1 +1 @@
+- The best instance we had was, believe it or not, in secondary school. Right, we'll go round the...
++ One of the best lessons we had was, believe it or not, in secondary school.
+--- file AN_WILTY_EP21_lie15.txt compared finish ---
+
+[SAME] AN_WILTY_EP21_lie16.txt
+[DIFFERENT] AN_WILTY_EP21_lie17.txt
+--- begin compared: AN_WILTY_EP21_lie17.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP21_lie17.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP21_lie17.txt
+@@ -1 +1 @@
+- I'd learn how to use money in a sensible way. And I got in there and it was full of the...
++ learn how to use money in a sensible way and it got in there and it was uh full of the uh
+--- file AN_WILTY_EP21_lie17.txt compared finish ---
+
+[DIFFERENT] AN_WILTY_EP21_lie18.txt
+--- begin compared: AN_WILTY_EP21_lie18.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP21_lie18.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP21_lie18.txt
+@@ -1 +1 @@
+- The only concert I have ever been to was by Show...
++ The only concert I have ever been to was by show.
+--- file AN_WILTY_EP21_lie18.txt compared finish ---
+
+[DIFFERENT] AN_WILTY_EP21_lie22.txt
+--- begin compared: AN_WILTY_EP21_lie22.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP21_lie22.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP21_lie22.txt
+@@ -1 +1 @@
+- These are some of the birthday cards that I've posted to my...
++ These are some of the birthday cards that I've posted to my page.
+--- file AN_WILTY_EP21_lie22.txt compared finish ---
+
+[SAME] AN_WILTY_EP21_lie23.txt
+[DIFFERENT] AN_WILTY_EP21_lie24.txt
+--- begin compared: AN_WILTY_EP21_lie24.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP21_lie24.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP21_lie24.txt
+@@ -1 +1 @@
+- Shut it! Because Sydney's real pedigree name is...
++ Because Sydney's real pedigree name is
+--- file AN_WILTY_EP21_lie24.txt compared finish ---
+
+[DIFFERENT] AN_WILTY_EP21_lie5.txt
+--- begin compared: AN_WILTY_EP21_lie5.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP21_lie5.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP21_lie5.txt
+@@ -1 +1 @@
+- Whenever someone recognises me but can't place me, I tell them I'm part of the Olympic cycle.
++ Whenever someone recognizes me but can't place me, I tell them I'm part of the Olympic cycle.
+--- file AN_WILTY_EP21_lie5.txt compared finish ---
+
+[DIFFERENT] AN_WILTY_EP21_lie6.txt
+--- begin compared: AN_WILTY_EP21_lie6.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP21_lie6.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP21_lie6.txt
+@@ -1 +1 @@
+- People come up to you and they think they might know you, but I'm not one of those really well-known faces. So you have to come up with something. And you come up with something.
++ People come up to you and they think they might know you, but I'm not one of those really well-known faces, so you have to come up with something. And you come up with something...
+--- file AN_WILTY_EP21_lie6.txt compared finish ---
+
+[DIFFERENT] AN_WILTY_EP21_lie7.txt
+--- begin compared: AN_WILTY_EP21_lie7.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP21_lie7.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP21_lie7.txt
+@@ -1 +1 @@
+- Yeah, but then it's quite awkward if they say, I don't know what.
++ But then it's quite awkward if they say, I don't know what.
+--- file AN_WILTY_EP21_lie7.txt compared finish ---
+
+[SAME] AN_WILTY_EP21_lie8.txt
+[SAME] AN_WILTY_EP21_lie9.txt
+[DIFFERENT] AN_WILTY_EP21_truth19.txt
+--- begin compared: AN_WILTY_EP21_truth19.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP21_truth19.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP21_truth19.txt
+@@ -1 +1 @@
+- It was at the bit of Wembley that's not a football stadium, but it
++ It was a bit of Wembley that's not a football stadium, but it
+--- file AN_WILTY_EP21_truth19.txt compared finish ---
+
+[DIFFERENT] AN_WILTY_EP21_truth2.txt
+--- begin compared: AN_WILTY_EP21_truth2.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP21_truth2.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP21_truth2.txt
+@@ -1 +1 @@
+- When I present a show for the first time, I like to wear red...
++ When I present a show for the first time, I like to wear red.
+--- file AN_WILTY_EP21_truth2.txt compared finish ---
+
+[SAME] AN_WILTY_EP21_truth20.txt
+[DIFFERENT] AN_WILTY_EP21_truth21.txt
+--- begin compared: AN_WILTY_EP21_truth21.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP21_truth21.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP21_truth21.txt
+@@ -1 +1 @@
+- I think she's had all the like golf names. He definitely sung dime
++ I think she's had all the like golf is he definitely sung time
+--- file AN_WILTY_EP21_truth21.txt compared finish ---
+
+[DIFFERENT] AN_WILTY_EP21_truth3.txt
+--- begin compared: AN_WILTY_EP21_truth3.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP21_truth3.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP21_truth3.txt
+@@ -1 +1 @@
+- Red is a colour synonymous with luck and fortune. With the Chinese, anyway.
++ Red is a colour synonymous with luck and fortune, with the Chinese anyway.
+--- file AN_WILTY_EP21_truth3.txt compared finish ---
+
+[DIFFERENT] AN_WILTY_EP21_truth4.txt
+--- begin compared: AN_WILTY_EP21_truth4.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP21_truth4.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP21_truth4.txt
+@@ -1 +1 @@
+- If I see one magpie, I say, hello, Mr Magpie, how's your partner? Cos you have to say partner, you can't say...
++ If I see one magpie, I say, Hello, Mr Magpie, how's your partner? Because you have to say partner. You can't say...
+--- file AN_WILTY_EP21_truth4.txt compared finish ---
+
+[DIFFERENT] AN_WILTY_EP22_truth2.txt
+--- begin compared: AN_WILTY_EP22_truth2.txt ---
+--- ../data/DOLOS/txt_files/txt_M\AN_WILTY_EP22_truth2.txt
++++ ../data/DOLOS/txt_files/txt_LV3\AN_WILTY_EP22_truth2.txt
+@@ -1 +1 @@
+- Firstly, there's a suite that I have to have before I feel...
++ Firstly, there's a suite that I have to have before I feel comfortable.
+--- file AN_WILTY_EP22_truth2.txt compared finish ---
+
+verified finished.
+
+进程已结束，退出代码为 0
