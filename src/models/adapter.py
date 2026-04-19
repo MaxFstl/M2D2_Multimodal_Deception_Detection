@@ -11,11 +11,9 @@ class w2v2_adapter_nlp(nn.Module):
     def __init__(self, transformer_encoder):
         super(w2v2_adapter_nlp, self).__init__()
 
-        self.attention = nn.Sequential(
-            transformer_encoder.attention,
-            transformer_encoder.dropout,
-            transformer_encoder.layer_norm,
-        )
+        self.attention = transformer_encoder.attention
+        self.dropout = transformer_encoder.dropout
+        self.layer_norm = transformer_encoder.layer_norm
         self.adapter = nn.Sequential(
             nn.Dropout(p=0.1, inplace=False),
             nn.Linear(in_features=768, out_features=256, bias=True),
@@ -29,7 +27,11 @@ class w2v2_adapter_nlp(nn.Module):
         )
 
     def forward(self, x):
-        mhsa = self.attention(x) + x
+        attn_out = self.attention(x)
+        if isinstance(attn_out, tuple):
+            attn_out = attn_out[0]
+        attn_out = self.dropout(attn_out)
+        mhsa = self.layer_norm(attn_out) + x
         adapter_seq = self.adapter(mhsa) + mhsa
         ffn = self.feed_forward(adapter_seq) + adapter_seq
         return ffn
@@ -115,31 +117,27 @@ class w2v2_adapter_conv(nn.Module):
     def __init__(self, transformer_encoder):
         super(w2v2_adapter_conv, self).__init__()
 
-        # Attention Layers
-        # note that for W2V2 encoder layer_norm is after MHSA while for ViT encoder layer_norm is before
-        self.attention = nn.Sequential(
-            transformer_encoder.attention,
-            transformer_encoder.dropout,
-            transformer_encoder.layer_norm,
-        )
+        self.attention = transformer_encoder.attention
+        self.dropout = transformer_encoder.dropout
+        self.layer_norm = transformer_encoder.layer_norm
 
         self.mhsa_conv_pass = Efficient_Conv_Pass()
         self.ffn_conv_pass = Efficient_Conv_Pass()
 
-        # norm required after conv pass
         self.adapter_norm1 = nn.LayerNorm((768,), eps=1e-05, elementwise_affine=True)
         self.adapter_norm2 = nn.LayerNorm((768,), eps=1e-05, elementwise_affine=True)
 
-        # Feed Forward Layers
         self.feed_forward = nn.Sequential(
             transformer_encoder.feed_forward,
             transformer_encoder.final_layer_norm,
         )
 
     def forward(self, x):
-
-        # shape of x = [batch_size, 64, 768]
-        mhsa = self.attention(x) + x + self.mhsa_conv_pass(x)
+        attn_out = self.attention(x)
+        if isinstance(attn_out, tuple):
+            attn_out = attn_out[0]
+        attn_out = self.dropout(attn_out)
+        mhsa = self.layer_norm(attn_out) + x + self.mhsa_conv_pass(x)
         mhsa = self.adapter_norm1(mhsa)
 
         ffn = self.feed_forward(mhsa) + mhsa + self.ffn_conv_pass(mhsa)
@@ -196,10 +194,7 @@ class bert_adapter_nlp(nn.Module):
     def __init__(self, transformer_encoder, hidden_dim: int = 64, dropout: float = 0.1):
         super(bert_adapter_nlp, self).__init__()
 
-        self.attention = nn.Sequential(
-            transformer_encoder.attention,
-            transformer_encoder.attention.output.LayerNorm,
-        )
+        self.attention = transformer_encoder.attention
         self.adapter = nn.Sequential(
             nn.Dropout(p=dropout, inplace=False),
             nn.Linear(768, hidden_dim, bias=True),
@@ -207,15 +202,17 @@ class bert_adapter_nlp(nn.Module):
             nn.Linear(hidden_dim, 768, bias=True),
             nn.LayerNorm(768, eps=1e-05, elementwise_affine=True),
         )
-        self.feed_forward = nn.Sequential(
-            transformer_encoder.intermediate,
-            transformer_encoder.output,
-        )
+        self.intermediate = transformer_encoder.intermediate
+        self.output = transformer_encoder.output
 
     def forward(self, x):
-        mhsa = self.attention(x) + x
+        attn_out = self.attention(x)
+        if isinstance(attn_out, tuple):
+            attn_out = attn_out[0]
+        mhsa = attn_out + x
         adapter_seq = self.adapter(mhsa) + mhsa
-        ffn = self.feed_forward(adapter_seq) + adapter_seq
+        intermediate_out = self.intermediate(adapter_seq)
+        ffn = self.output(intermediate_out, adapter_seq)
         return ffn
 
 
@@ -223,10 +220,7 @@ class bert_adapter_conv(nn.Module):
     def __init__(self, transformer_encoder):
         super(bert_adapter_conv, self).__init__()
 
-        self.attention = nn.Sequential(
-            transformer_encoder.attention,
-            transformer_encoder.attention.output.LayerNorm,
-        )
+        self.attention = transformer_encoder.attention
 
         self.mhsa_conv_pass = Efficient_Conv_Pass()
         self.ffn_conv_pass = Efficient_Conv_Pass()
@@ -234,14 +228,16 @@ class bert_adapter_conv(nn.Module):
         self.adapter_norm1 = nn.LayerNorm(768, eps=1e-05, elementwise_affine=True)
         self.adapter_norm2 = nn.LayerNorm(768, eps=1e-05, elementwise_affine=True)
 
-        self.feed_forward = nn.Sequential(
-            transformer_encoder.intermediate,
-            transformer_encoder.output,
-        )
+        self.intermediate = transformer_encoder.intermediate
+        self.output = transformer_encoder.output
 
     def forward(self, x):
-        mhsa = self.attention(x) + x + self.mhsa_conv_pass(x)
+        attn_out = self.attention(x)
+        if isinstance(attn_out, tuple):
+            attn_out = attn_out[0]
+        mhsa = attn_out + x + self.mhsa_conv_pass(x)
         mhsa = self.adapter_norm1(mhsa)
-        ffn = self.feed_forward(mhsa) + mhsa + self.ffn_conv_pass(mhsa)
+        intermediate_out = self.intermediate(mhsa)
+        ffn = self.output(intermediate_out, mhsa) + mhsa + self.ffn_conv_pass(mhsa)
         ffn = self.adapter_norm2(ffn)
         return ffn

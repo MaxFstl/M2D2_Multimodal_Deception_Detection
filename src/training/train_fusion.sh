@@ -15,6 +15,6 @@ do
     --data_root '/home2/xiaobao/datasets/deception/WILTY/data/' \
     --audio_path '/home2/xiaobao/datasets/deception/WILTY/data/audio_files/' \
     --visual_path '/home2/xiaobao/datasets/deception/WILTY/data/face_frames/' \
-    --
+    
   done
 done

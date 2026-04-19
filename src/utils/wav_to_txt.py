@@ -1,6 +1,7 @@
 import os
 import whisper
 from src.utils.load_config import load_config
+import torch
 
 
 def transcribeAudio(audio_dir, out_dir):
@@ -9,11 +10,12 @@ def transcribeAudio(audio_dir, out_dir):
         print(f"Found {len(existing_files)} existing files in {out_dir}")
 
         if len(existing_files) > 0:
-            print("Already extracted audio. Skipping this step.")
+            print("Already extracted text. Skipping this step.")
             return
         else:
-            print("Directory exists but empty. Preprocessing the audio...")
-    model = whisper.load_model("large-v3")  # medium / large-v3
+            print("Directory exists but empty. Preprocessing the text...")
+
+    model = whisper.load_model("medium")  # medium / large-v3
     config = load_config()
     os.makedirs(out_dir, exist_ok=True)
 

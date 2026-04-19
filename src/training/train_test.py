@@ -5,18 +5,12 @@ import time
 
 import torch
 import torch.nn as nn
-from torch.utils.data import Dataset, DataLoader
 
-# from torch.optim.lr_scheduler import ReduceLROnPlateau
-
-from dataloader.audio_visual_dataset import AudioVisualDataset, af_collate_fn
-
-from models.audio_model import W2V2_Model
-from models.fusion_model import Fusion
-
+from src.data.loaders import create_dataloaders
+from src.models.audio_model import W2V2_Model
+from src.models.fusion_model import Fusion
 from src.utils.load_config import load_config
 
-# pip install torch metrics
 from sklearn.metrics import (
     classification_report,
     accuracy_score,
@@ -25,7 +19,8 @@ from sklearn.metrics import (
     auc,
 )
 
-from models.visual_model import ViT_model
+from src.models.visual_model import ViT_model
+from src.models.text_model import TextModel
 
 
 def parse_options():
@@ -79,6 +74,12 @@ def parse_options():
         help="audio dataset root dir",
     )
     parser.add_argument(
+        "--annos_path",
+        type=str,
+        default=config["paths"]["annotations"],
+        help="audio dataset root dir",
+    )
+    parser.add_argument(
         "--visual_path",
         type=str,
         default=config["paths"]["image_dir"],
@@ -88,7 +89,24 @@ def parse_options():
         "--text_path",
         type=str,
         default=config["paths"]["text_dir"],
-        help="visual (FACE) dataset root dir",
+        help="text transcripts root dir",
+    )
+    parser.add_argument(
+        "--annotations",
+        type=str,
+        default=config["paths"]["annotations"],
+        help="annotations file path",
+    )
+    parser.add_argument(
+        "--text_max_length",
+        type=int,
+        default=512,
+        help="max length for text tokenization",
+    )
+    parser.add_argument(
+        "--use_mock_text",
+        action="store_true",
+        help="use mock text instead of real transcripts",
     )
 
     #### TRAINING LOGS
@@ -134,7 +152,7 @@ def parse_options():
 
     opts = parser.parse_args()
     torch.manual_seed(opts.seed)
-    opts.device = torch.device(opts.device_ID)
+    opts.device = torch.device(opts.device)
     # if "fusion" in opts.model_to_train:
     #     opts.model_to_train = opts.model_to_train + "_" + opts.fusion_type
 
@@ -172,41 +190,27 @@ def train_one_epoch(
     loss_fn,
     loss_audio,
     loss_vision,
-    loss_multi,
+    loss_text,
 ):
-    ### Local Parameters
     epoch_loss = []
     epoch_predictions = []
-    epoch_predictions_multi = []
     epoch_labels = []
-    epoch_labels_multi = []
     start_time = time.time()
 
     model.train()
 
     if args.model_to_train == "audio":
-
-        ###Iterating over data loader
-        for i, (waves, _, labels) in enumerate(train_data_loader):
-            # required only for audio with shape [bs, 1 , sample length] ; does not affect face frames tensor
-            waves = waves.squeeze(1)
-
-            # Loading waves and labels to device
+        for i, batch in enumerate(train_data_loader):
+            waves = batch["audio"].squeeze(1)
             waves = waves.to(args.device)
-            labels = labels.to(args.device)
+            labels = batch["label"].to(args.device)
 
-            # Reseting Gradients
             optimizer.zero_grad()
-
-            # Forward
             preds = model(waves)
-
-            # Calculating Loss
             _loss = loss_fn(preds, labels)
             loss = _loss.item()
             epoch_loss.append(loss)
 
-            # Backward
             _loss.backward()
             optimizer.step()
 
@@ -215,25 +219,39 @@ def train_one_epoch(
 
             if i % 10 == 0:
                 print("iter {}, loss {:.5f}".format(str(i), loss))
+
     elif args.model_to_train == "vision":
+        for i, batch in enumerate(train_data_loader):
+            faces = batch["video"].to(args.device)
+            labels = batch["label"].to(args.device)
 
-        ###Iterating over data loader
-        for i, (_, faces, labels) in enumerate(train_data_loader):
-            faces = faces.to(args.device)
-            labels = labels.to(args.device)
-
-            # Reseting Gradients
             optimizer.zero_grad()
-
-            # Forward
             preds = model(faces)
-
-            # Calculating Loss
             _loss = loss_fn(preds, labels)
             loss = _loss.item()
             epoch_loss.append(loss)
 
-            # Backward
+            _loss.backward()
+            optimizer.step()
+
+            epoch_predictions.append(torch.argmax(preds, dim=1))
+            epoch_labels.append(labels)
+
+            if i % 10 == 0:
+                print("iter {}, loss {:.5f}".format(str(i), loss))
+
+    elif args.model_to_train == "text":
+        for i, batch in enumerate(train_data_loader):
+            input_ids = batch["text_ids"].to(args.device)
+            attention_mask = batch["text_mask"].to(args.device)
+            labels = batch["label"].to(args.device)
+
+            optimizer.zero_grad()
+            preds = model(input_ids, attention_mask)
+            _loss = loss_fn(preds, labels)
+            loss = _loss.item()
+            epoch_loss.append(loss)
+
             _loss.backward()
             optimizer.step()
 
@@ -244,32 +262,29 @@ def train_one_epoch(
                 print("iter {}, loss {:.5f}".format(str(i), loss))
 
     else:  # fusion models
-        for i, (waves, faces, labels) in enumerate(train_data_loader):
-            waves = waves.squeeze(1)
+        for i, batch in enumerate(train_data_loader):
+            waves = batch["audio"].squeeze(1).to(args.device)
+            faces = batch["video"].to(args.device)
+            input_ids = batch["text_ids"].to(args.device)
+            attention_mask = batch["text_mask"].to(args.device)
+            labels = batch["label"].to(args.device)
 
-            # Loading waves and labels to device
-            waves = waves.to(args.device)
-            faces = faces.to(args.device)
-            labels = labels.to(args.device)
-
-            # Reseting Gradients
             optimizer.zero_grad()
 
-            # Forward
-            preds, a_preds, v_preds = model(waves, faces)
+            preds, a_preds, v_preds, t_preds = model(
+                waves, faces, input_ids, attention_mask
+            )
 
-            # Calculating Loss
             _loss = loss_fn(preds, labels)
 
             if args.multi:
                 _loss_a = loss_audio(a_preds, labels)
                 _loss_v = loss_vision(v_preds, labels)
-                _loss = _loss + _loss_a
-                _loss = _loss + _loss_v
+                _loss_t = loss_text(t_preds, labels)
+                _loss = _loss + _loss_a + _loss_v + _loss_t
             loss = _loss.item()
             epoch_loss.append(loss)
 
-            # Backward
             _loss.backward()
             optimizer.step()
 
@@ -279,64 +294,47 @@ def train_one_epoch(
             if i % 10 == 0:
                 print("iter {}, loss {:.5f}".format(str(i), loss))
 
-    # CALCULATE ACCURACY AND CONFUSION MATRIX
     epoch_predictions = torch.cat(epoch_predictions)
     epoch_labels = torch.cat(epoch_labels)
 
-    # Overall Epoch Results
     end_time = time.time()
-    total_time = end_time - start_time
+    _ = end_time - start_time
 
-    # Acc and Loss
     epoch_loss = np.mean(epoch_loss)
 
-    # return epoch_loss, acc, cfm, f1
     return epoch_loss, epoch_predictions, epoch_labels, None, None
 
 
 def val_one_epoch(
-    args, val_data_loader, model, loss_fn, loss_audio, loss_vision, loss_multi
+    args, val_data_loader, model, loss_fn, loss_audio, loss_vision, loss_text
 ):
-    #  Local Parameters
     epoch_loss = []
     epoch_predictions = []
-    epoch_predictions_multi = []
     epoch_labels = []
-    epoch_labels_multi = []
     start_time = time.time()
 
     model.eval()
 
     with torch.no_grad():
-        # Iterating over data loader
         if args.model_to_train == "audio":
-            for waves, _, labels in val_data_loader:
-                waves = waves.squeeze(1)
+            for batch in val_data_loader:
+                waves = batch["audio"].squeeze(1).to(args.device)
+                labels = batch["label"].to(args.device)
 
-                # Loading waves and labels to device
-                waves = waves.to(args.device)
-                labels = labels.to(args.device)
-
-                # Forward
                 preds = model(waves)
-
-                # Calculating Loss
                 _loss = loss_fn(preds, labels)
                 loss = _loss.item()
                 epoch_loss.append(loss)
 
                 epoch_predictions.append(torch.argmax(preds, dim=1))
                 epoch_labels.append(labels)
+
         elif args.model_to_train == "vision":
-            for _, faces, labels in val_data_loader:
-                # Loading waves and labels to device
-                faces = faces.to(args.device)
-                labels = labels.to(args.device)
+            for batch in val_data_loader:
+                faces = batch["video"].to(args.device)
+                labels = batch["label"].to(args.device)
 
-                # Forward
                 preds = model(faces)
-
-                # Calculating Loss
                 _loss = loss_fn(preds, labels)
                 loss = _loss.item()
                 epoch_loss.append(loss)
@@ -344,42 +342,51 @@ def val_one_epoch(
                 epoch_predictions.append(torch.argmax(preds, dim=1))
                 epoch_labels.append(labels)
 
-        else:
-            for waves, faces, labels in val_data_loader:
-                waves = waves.squeeze(1)
+        elif args.model_to_train == "text":
+            for batch in val_data_loader:
+                input_ids = batch["text_ids"].to(args.device)
+                attention_mask = batch["text_mask"].to(args.device)
+                labels = batch["label"].to(args.device)
 
-                # Loading waves and labels to device
-                waves = waves.to(args.device)
-                faces = faces.to(args.device)
-                labels = labels.to(args.device)
+                preds = model(input_ids, attention_mask)
+                _loss = loss_fn(preds, labels)
+                loss = _loss.item()
+                epoch_loss.append(loss)
 
-                # Forward
-                preds, a_preds, v_preds = model(waves, faces)
+                epoch_predictions.append(torch.argmax(preds, dim=1))
+                epoch_labels.append(labels)
 
-                # Calculating Loss
+        else:  # fusion
+            for batch in val_data_loader:
+                waves = batch["audio"].squeeze(1).to(args.device)
+                faces = batch["video"].to(args.device)
+                input_ids = batch["text_ids"].to(args.device)
+                attention_mask = batch["text_mask"].to(args.device)
+                labels = batch["label"].to(args.device)
+
+                preds, a_preds, v_preds, t_preds = model(
+                    waves, faces, input_ids, attention_mask
+                )
+
                 _loss = loss_fn(preds, labels)
                 if args.multi:
                     _loss_a = loss_audio(a_preds, labels)
                     _loss_v = loss_vision(v_preds, labels)
-                    _loss = _loss + _loss_a
-                    _loss = _loss + _loss_v
+                    _loss_t = loss_text(t_preds, labels)
+                    _loss = _loss + _loss_a + _loss_v + _loss_t
                 loss = _loss.item()
                 epoch_loss.append(loss)
 
                 epoch_predictions.append(torch.argmax(preds, dim=1))
                 epoch_labels.append(labels)
 
-    # CALCULATE ACCURACY AND CONFUSION MATRIX
     epoch_predictions = torch.cat(epoch_predictions)
     epoch_labels = torch.cat(epoch_labels)
 
-    ###Overall Epoch Results
     end_time = time.time()
-    total_time = end_time - start_time
+    _ = end_time - start_time
 
-    ###Acc and Loss
     epoch_loss = np.mean(epoch_loss)
-    # return epoch_loss, acc, cfm, f1
     return epoch_loss, epoch_predictions, epoch_labels, None, None
 
 
@@ -403,163 +410,201 @@ def evaluation_multi(labels, preds, labels2, preds2):
     return acc, f1, auc_score, acc2, f1_2, auc_2
 
 
+def load_text_transcripts(text_dir: str) -> dict:
+    texts = {}
+    if os.path.exists(text_dir):
+        for fname in os.listdir(text_dir):
+            if fname.endswith(".txt"):
+                clip_name = fname.replace(".txt", "")
+                with open(os.path.join(text_dir, fname), "r", encoding="utf-8") as f:
+                    texts[clip_name] = f.read().strip()
+    return texts
+
+
 def train_test(log_name, args):
     f = open(log_name, "a")
 
-    for P in args.protocols:
-        # create log file for each run
-        # device = torch.device(args.device)
+    config = load_config()
 
-        print("\n\nCurrent protocol.....................", P)
-        train, test = P
+    f.write(
+        "\n\nUsing stratified train/val/test split ({}/{}/{})".format(
+            config["data"]["train_split"],
+            config["data"]["val_split"],
+            config["data"]["test_split"],
+        )
+    )
 
-        f.write("\n\nTrain file = " + train.split(".")[0])
-        f.write("\nTest file = " + test.split(".")[0])
+    if args.model_to_train in ["text", "fusion"]:
+        texts_dict = load_text_transcripts(args.text_path)
+    else:
+        texts_dict = None
 
-        train_anno = args.data_root + "protocols/" + train
-        test_anno = args.data_root + "protocols/" + test
+    if args.model_to_train in ["audio", "vision", "text", "fusion"]:
+        loader_config = {
+            "batch_size": args.batch_size,
+            "num_frames": config["data"]["video"]["num_frames"],
+            "frame_size": config["data"]["video"]["resize"][0],
+            "num_audio_tokens": 64,
+            "train_split": config["data"]["train_split"],
+            "val_split": config["data"]["val_split"],
+            "test_split": config["data"]["test_split"],
+            "class_weights": config["training"]["class_weights"],
+        }
+        train_loader, val_loader, test_loader = create_dataloaders(
+            annotations_file=args.annos_path,
+            audio_dir=args.audio_path,
+            img_dir=args.visual_path,
+            config=loader_config,
+            texts=texts_dict,
+            use_mock_text=args.use_mock_text,
+            num_workers=4,
+        )
 
-        if args.model_to_train in [
-            "audio",
-            "vision",
-            "fusion",
-        ]:
-            train_dataset = AudioVisualDataset(
-                train_anno, args.audio_path, args.visual_path
-            )
-            test_dataset = AudioVisualDataset(
-                test_anno, args.audio_path, args.visual_path
-            )
-            train_loader = DataLoader(
-                train_dataset,
-                batch_size=args.batch_size,
-                shuffle=True,
-                collate_fn=af_collate_fn,
-                num_workers=4,
-            )
-            test_loader = DataLoader(
-                test_dataset,
-                batch_size=args.batch_size,
-                shuffle=True,
-                collate_fn=af_collate_fn,
-                num_workers=4,
-            )
+    else:
+        raise Exception(
+            " please indicate which model to train: audio, vision, text or fusion ..."
+        )
 
-        else:
-            raise Exception(
-                " please indicate which model to train: audio, vision or fusion ..."
-            )
+    print("\t Dataset Loaded")
 
-        print("\t Dataset Loaded")
+    if args.model_to_train == "audio":
+        model = W2V2_Model(args.num_encoders, args.adapter, args.adapter_type)
+        model.to(args.device)
+    elif args.model_to_train == "vision":
+        model = ViT_model(args.num_encoders, args.adapter, args.adapter_type)
+        model.to(args.device)
+    elif args.model_to_train == "text":
+        model = TextModel(args.num_encoders, args.adapter, args.adapter_type)
+        model.to(args.device)
+    else:
+        model = Fusion(
+            args.fusion_type,
+            args.num_encoders,
+            args.adapter,
+            args.adapter_type,
+            args.multi,
+            num_frames=config["data"]["video"]["num_frames"],
+        )
+        model.to(args.device)
+    print("\t Model Loaded")
 
-        if args.model_to_train == "audio":
-            model = W2V2_Model(args.num_encoders, args.adapter, args.adapter_type)
-            model.to(args.device)
-        elif args.model_to_train == "vision":
-            model = ViT_model(args.num_encoders, args.adapter, args.adapter_type)
-            model.to(args.device)
-        else:
-            model = Fusion(
-                args.fusion_type,
-                args.num_encoders,
-                args.adapter,
-                args.adapter_type,
-                args.multi,
-            )
-            model.to(args.device)
-        print("\t Model Loaded")
+    optimizer = torch.optim.Adam(model.parameters(), lr=args.lr)
 
-        # Optimizer
-        optimizer = torch.optim.Adam(model.parameters(), lr=args.lr)
+    loss_fn = nn.CrossEntropyLoss()
+    if args.multi:
+        loss_audio = nn.CrossEntropyLoss()
+        loss_vision = nn.CrossEntropyLoss()
+        loss_text = nn.CrossEntropyLoss()
+    else:
+        loss_audio = loss_vision = loss_text = None
 
-        # Loss Function
-        loss_fn = nn.CrossEntropyLoss()
-        if args.multi:
-            loss_audio = nn.CrossEntropyLoss()
-            loss_vision = nn.CrossEntropyLoss()
-            loss_multi = None
-        else:
-            loss_audio = loss_vision = loss_multi = None
+    best_acc = 0.0
+    results = ""
+    val_results = ""
+    test_results = ""
+    multi_task_result = ""
 
-        best_acc = 0.0
-        best_mae = 100.0
-        results = ""
-        val_results = ""
-        multi_task_result = ""
+    print("\t Started Training")
+    if args.multi:
+        print("\t Multitask learning")
+    for epoch in range(args.num_epochs):
 
-        print("\t Started Training")
-        if args.multi:
-            print("\t Multitask learning")
-        for epoch in range(args.num_epochs):
+        if (epoch + 1) % 5 == 0:
+            print("\t\t Epoch....", epoch + 1)
 
-            if (epoch + 1) % 5 == 0:
-                print("\t\t Epoch....", epoch + 1)
+        loss, preds, labels, preds_multi, labels_multi = train_one_epoch(
+            args,
+            train_loader,
+            model,
+            optimizer,
+            loss_fn,
+            loss_audio,
+            loss_vision,
+            loss_text,
+        )
 
-            # Training
-            loss, preds, lables, preds_multi, lables_multi = train_one_epoch(
+        train_acc, train_f1, train_auc = evaluation(
+            labels.detach().cpu().numpy(), preds.detach().cpu().numpy()
+        )
+
+        val_loss, val_preds, val_labels, val_preds_multi, val_labels_multi = (
+            val_one_epoch(
                 args,
-                train_loader,
+                val_loader,
                 model,
-                optimizer,
                 loss_fn,
                 loss_audio,
                 loss_vision,
-                loss_multi,
+                loss_text,
+            )
+        )
+
+        val_acc, val_f1, val_auc = evaluation(
+            val_labels.detach().cpu().numpy(), val_preds.detach().cpu().numpy()
+        )
+
+        print(
+            "epoch {}, train_acc {:.5f}, train_f1: {:.5f}, train_auc:{:.5f} "
+            "val_acc {:.5f}, val_f1: {:.5f}, val_auc:{:.5f}".format(
+                epoch, train_acc, train_f1, train_auc, val_acc, val_f1, val_auc
+            )
+        )
+
+        f.write(
+            "epoch {}, val_acc {:.5f}, val_f1: {:.5f}, val_auc:{:.5f}\n".format(
+                epoch, val_acc, val_f1, val_auc
+            )
+        )
+
+        if val_acc > best_acc:
+            best_acc = val_acc
+            results = "best val results are acc {:.5f}, f1: {:.5f}, auc:{:.5f} ".format(
+                val_acc, val_f1, val_auc
+            )
+            val_results = classification_report(
+                val_labels.cpu().numpy(),
+                val_preds.cpu().numpy(),
+                target_names=["truth", "deception"],
             )
 
-            train_acc, train_f1, train_auc = evaluation(
-                lables.detach().cpu().numpy(), preds.detach().cpu().numpy()
-            )
-            # Validation
-            val_loss, val_preds, val_lables, val_preds_multi, val_lables_multi = (
-                val_one_epoch(
-                    args,
-                    test_loader,
-                    model,
-                    loss_fn,
-                    loss_audio,
-                    loss_vision,
-                    loss_multi,
-                )
-            )
+    print("\nEvaluating on test set...")
+    test_loss, test_preds, test_labels, test_preds_multi, test_labels_multi = (
+        val_one_epoch(
+            args,
+            test_loader,
+            model,
+            loss_fn,
+            loss_audio,
+            loss_vision,
+            loss_text,
+        )
+    )
+    test_acc, test_f1, test_auc = evaluation(
+        test_labels.detach().cpu().numpy(), test_preds.detach().cpu().numpy()
+    )
+    test_results = "test results: acc {:.5f}, f1: {:.5f}, auc:{:.5f}".format(
+        test_acc, test_f1, test_auc
+    )
+    test_report = classification_report(
+        test_labels.cpu().numpy(),
+        test_preds.cpu().numpy(),
+        target_names=["truth", "deception"],
+    )
 
-            val_acc, val_f1, val_auc = evaluation(
-                val_lables.detach().cpu().numpy(), val_preds.detach().cpu().numpy()
-            )
-
-            print(
-                "epoch {}, train_acc {:.5f}, train_f1: {:.5f}, train_auc:{:.5f} "
-                "test_acc {:.5f}, test_f1: {:.5f}, test_auc:{:.5f}".format(
-                    epoch, train_acc, train_f1, train_auc, val_acc, val_f1, val_auc
-                )
-            )
-
-            # log the results for each epoch
-            f.write(
-                "epoch {}, test_acc {:.5f}, test_f1: {:.5f}, test_auc:{:.5f}".format(
-                    epoch, val_acc, val_f1, val_auc
-                )
-            )
-            f.write("\n")
-
-            if val_acc > best_acc:
-                best_acc = val_acc
-                results = "best results are acc {:.5f}, f1: {:.5f}, auc:{:.5f} ".format(
-                    val_acc, val_f1, val_auc
-                )
-                val_results = classification_report(
-                    val_lables.cpu().numpy(),
-                    val_preds.cpu().numpy(),
-                    target_names=["truth", "deception"],
-                )
-        print("results:\n\n")
-        print(results)
-        f.write("****************\n")
-        f.write(results)
-        f.write("\n\n")
-        f.write(val_results)
-        f.write("\n\n")
-        f.write(multi_task_result)
+    print("\nValidation results:\n")
+    print(results)
+    print("\nTest results:\n")
+    print(test_results)
+    f.write("****************\n")
+    f.write(results)
+    f.write("\n\n")
+    f.write(val_results)
+    f.write("\n\n")
+    f.write(test_results)
+    f.write("\n\n")
+    f.write(test_report)
+    f.write("\n\n")
+    f.write(multi_task_result)
 
     f.close()
 
@@ -576,7 +621,7 @@ if __name__ == "__main__":
         f.write("\nEpochs = " + str(opts.num_epochs))
         f.write("\nNum Encoders = " + str(opts.num_encoders))
         f.write("\nAdapter = " + str(opts.adapter))
-        if opts.adapter == True:
+        if opts.adapter:
             f.write("\nAdapter Type = " + opts.adapter_type)
         f.write("\n------------------------------------------")
         f.write("\n------------------------------------------")

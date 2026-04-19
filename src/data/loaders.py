@@ -14,12 +14,13 @@ def create_dataloaders(
     audio_dir: str,
     img_dir: str,
     config: Dict,
-    texts: Optional[List[str]] = None,
+    texts: Optional[Dict[str, str]] = None,
     use_mock_text: bool = True,
     num_workers: int = 4,
     pin_memory: bool = True,
 ) -> Tuple[DataLoader, DataLoader, DataLoader]:
     annos = pd.read_csv(annotations_file)
+    clip_names = annos.iloc[:, 1].tolist()
     labels = annos.iloc[:, -1].apply(lambda x: 0 if x == "truth" else 1).tolist()
 
     existing_audio = {
@@ -53,11 +54,16 @@ def create_dataloaders(
         sample_weights, len(sample_weights), replacement=True
     )
 
+    def get_texts_for_indices(indices: List[int]) -> Optional[List[str]]:
+        if texts is None:
+            return None
+        return [texts.get(clip_names[i]) for i in indices]
+
     train_dataset = DOLOSDataset(
         annotations_file=annotations_file,
         audio_dir=audio_dir,
         img_dir=img_dir,
-        texts=[texts[i] if texts else None for i in train_idx] if texts else None,
+        texts=get_texts_for_indices(train_idx),
         num_frames=config.get("num_frames", 16),
         frame_size=config.get("frame_size", 224),
         num_audio_tokens=config.get("num_audio_tokens", 64),
@@ -69,7 +75,7 @@ def create_dataloaders(
         annotations_file=annotations_file,
         audio_dir=audio_dir,
         img_dir=img_dir,
-        texts=[texts[i] if texts else None for i in val_idx] if texts else None,
+        texts=get_texts_for_indices(val_idx),
         num_frames=config.get("num_frames", 16),
         frame_size=config.get("frame_size", 224),
         num_audio_tokens=config.get("num_audio_tokens", 64),
@@ -81,7 +87,7 @@ def create_dataloaders(
         annotations_file=annotations_file,
         audio_dir=audio_dir,
         img_dir=img_dir,
-        texts=[texts[i] if texts else None for i in test_idx] if texts else None,
+        texts=get_texts_for_indices(test_idx),
         num_frames=config.get("num_frames", 16),
         frame_size=config.get("frame_size", 224),
         num_audio_tokens=config.get("num_audio_tokens", 64),

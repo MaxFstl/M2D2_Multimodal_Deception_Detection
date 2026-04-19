@@ -68,13 +68,22 @@ class Fusion(nn.Module):
     Supports fusion types: "concat" or "cross2"
     """
 
-    def __init__(self, fusion_type, num_encoders, adapter, adapter_type, multi=False):
+    def __init__(
+        self,
+        fusion_type,
+        num_encoders,
+        adapter,
+        adapter_type,
+        multi=False,
+        num_frames: int = 16,
+    ):
         super(Fusion, self).__init__()
         self.fusion_type = fusion_type
         self.num_encoders = num_encoders
         self.adapter = adapter
         self.adapter_type = adapter_type
         self.multi = multi
+        self.num_frames = num_frames
 
         # ========== AUDIO MODEL ==========
         audio_model = torchaudio.pipelines.WAV2VEC2_BASE.get_model()
@@ -123,7 +132,9 @@ class Fusion(nn.Module):
             p.requires_grad = False
 
         vit = vit_b_16.encoder
-        self.pos_embedding = nn.Parameter(torch.empty(1, 64, 768).normal_(std=0.02))
+        self.pos_embedding = nn.Parameter(
+            torch.empty(1, self.num_frames, 768).normal_(std=0.02)
+        )
 
         face_layer_list = []
         for i in range(self.num_encoders):
