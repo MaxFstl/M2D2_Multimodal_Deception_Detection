@@ -28,7 +28,7 @@ class CrossFusionModule(nn.Module):
         self.project_mod1 = nn.Linear(768, dim)
         self.project_mod2 = nn.Linear(768, dim)
         self.corr_weights = torch.nn.Parameter(
-            torch.empty(dim, dim, requires_grad=True).type(torch.cuda.FloatTensor)
+            torch.empty(dim, dim, requires_grad=True)
         )
         nn.init.xavier_normal_(self.corr_weights)
         self.project_bottleneck = nn.Sequential(
