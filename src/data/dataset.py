@@ -160,9 +160,9 @@ class DOLOSDataset(Dataset):
 
     def _parse_label(self, idx: int) -> int:
         str_label = self.annos.iloc[idx, -1]
-        if str_label == "truth":
+        if str_label.lower() == "truth":
             return 0
-        elif str_label == "deception":
+        elif str_label.lower() == "deception":
             return 1
         raise ValueError(f"Undefined label: {str_label}")
 
