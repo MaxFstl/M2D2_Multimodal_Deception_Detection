@@ -162,7 +162,7 @@ class DOLOSDataset(Dataset):
         str_label = self.annos.iloc[idx, -1]
         if str_label.lower() == "truth":
             return 0
-        elif str_label.lower() == "deception":
+        elif str_label.lower() == "deception" or str_label.lower() == "lie":
             return 1
         raise ValueError(f"Undefined label: {str_label}")
 
