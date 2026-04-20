@@ -45,7 +45,7 @@ class TestDOLOSDataset:
 
     def test_dataset_length(self, test_data_dir):
         dataset = DOLOSDataset(
-            annotations_file=test_data_dir["annotations_file"],
+            annotations=test_data_dir["annotations_file"],
             audio_dir=test_data_dir["audio_dir"],
             img_dir=test_data_dir["img_dir"],
             use_mock_text=True,
@@ -54,7 +54,7 @@ class TestDOLOSDataset:
 
     def test_dataset_returns_dict_with_all_modalities(self, test_data_dir):
         dataset = DOLOSDataset(
-            annotations_file=test_data_dir["annotations_file"],
+            annotations=test_data_dir["annotations_file"],
             audio_dir=test_data_dir["audio_dir"],
             img_dir=test_data_dir["img_dir"],
             use_mock_text=True,
@@ -70,7 +70,7 @@ class TestDOLOSDataset:
 
     def test_label_parsing(self, test_data_dir):
         dataset = DOLOSDataset(
-            annotations_file=test_data_dir["annotations_file"],
+            annotations=test_data_dir["annotations_file"],
             audio_dir=test_data_dir["audio_dir"],
             img_dir=test_data_dir["img_dir"],
             use_mock_text=True,
@@ -82,7 +82,7 @@ class TestDOLOSDataset:
 
     def test_mock_text_generation(self, test_data_dir):
         dataset = DOLOSDataset(
-            annotations_file=test_data_dir["annotations_file"],
+            annotations=test_data_dir["annotations_file"],
             audio_dir=test_data_dir["audio_dir"],
             img_dir=test_data_dir["img_dir"],
             use_mock_text=True,
@@ -92,7 +92,7 @@ class TestDOLOSDataset:
 
     def test_video_frames_shape(self, test_data_dir):
         dataset = DOLOSDataset(
-            annotations_file=test_data_dir["annotations_file"],
+            annotations=test_data_dir["annotations_file"],
             audio_dir=test_data_dir["audio_dir"],
             img_dir=test_data_dir["img_dir"],
             num_frames=16,
@@ -103,21 +103,33 @@ class TestDOLOSDataset:
         assert item["video"].shape == (16, 3, 224, 224)
 
     def test_custom_texts_passed_through(self, test_data_dir):
-        custom_texts = [
-            "custom text 1",
-            "custom text 2",
-            "custom text 3",
-            "custom text 4",
-        ]
+        custom_texts = {
+            "clip_001": "custom text 1",
+            "clip_002": "custom text 2",
+            "clip_003": "custom text 3",
+            "clip_004": "custom text 4",
+        }
         dataset = DOLOSDataset(
-            annotations_file=test_data_dir["annotations_file"],
+            annotations=test_data_dir["annotations_file"],
             audio_dir=test_data_dir["audio_dir"],
             img_dir=test_data_dir["img_dir"],
             texts=custom_texts,
             use_mock_text=False,
         )
+        clip_names = ["clip_001", "clip_002", "clip_003", "clip_004"]
         for i in range(len(dataset)):
-            assert dataset[i]["text"] == custom_texts[i]
+            assert dataset[i]["text"] == custom_texts[clip_names[i]]
+
+    def test_dataset_accepts_dataframe(self, test_data_dir):
+        annos = pd.read_csv(test_data_dir["annotations_file"])
+        dataset = DOLOSDataset(
+            annotations=annos,
+            audio_dir=test_data_dir["audio_dir"],
+            img_dir=test_data_dir["img_dir"],
+            use_mock_text=True,
+            skip_validation=True,
+        )
+        assert len(dataset) == 4
 
 
 class TestMultimodalCollateFn:
