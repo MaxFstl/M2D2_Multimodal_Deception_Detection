@@ -115,6 +115,24 @@ def parse_options():
         "--log", type=str, default="logs", help="log and save model name"
     )
     parser.add_argument(
+        "--checkpoint_dir",
+        type=str,
+        default="checkpoints",
+        help="directory to save model checkpoints",
+    )
+    parser.add_argument(
+        "--load_checkpoint",
+        type=str,
+        default=None,
+        help="path to checkpoint to resume training from",
+    )
+    parser.add_argument(
+        "--save_best_only",
+        action="store_true",
+        default=True,
+        help="only save checkpoint when validation accuracy improves",
+    )
+    parser.add_argument(
         "--protocols",
         type=list,
         default=[["train_fold3.csv", "test_fold3.csv"]],
@@ -178,8 +196,62 @@ def parse_options():
         )
     if not os.path.exists(opts.log):
         os.makedirs(opts.log)
+    
+    if not os.path.exists(opts.checkpoint_dir):
+        os.makedirs(opts.checkpoint_dir)
 
     return opts
+
+
+def save_checkpoint(
+    checkpoint_dir: str,
+    model_name: str,
+    model: nn.Module,
+    optimizer: torch.optim.Optimizer,
+    epoch: int,
+    best_acc: float,
+    config: dict,
+    is_best: bool = False,
+) -> str:
+    checkpoint = {
+        "epoch": epoch,
+        "model_state_dict": model.state_dict(),
+        "optimizer_state_dict": optimizer.state_dict(),
+        "best_acc": best_acc,
+        "config": config,
+    }
+    
+    checkpoint_path = os.path.join(checkpoint_dir, f"{model_name}_epoch_{epoch}.pt")
+    torch.save(checkpoint, checkpoint_path)
+    
+    if is_best:
+        best_path = os.path.join(checkpoint_dir, f"{model_name}_best.pt")
+        torch.save(checkpoint, best_path)
+        return best_path
+    
+    return checkpoint_path
+
+
+def load_checkpoint(
+    checkpoint_path: str,
+    model: nn.Module,
+    optimizer: torch.optim.Optimizer = None,
+    device: torch.device = None,
+) -> tuple:
+    if device is None:
+        device = torch.device("cpu")
+    
+    checkpoint = torch.load(checkpoint_path, map_location=device)
+    model.load_state_dict(checkpoint["model_state_dict"])
+    
+    if optimizer is not None:
+        optimizer.load_state_dict(checkpoint["optimizer_state_dict"])
+    
+    return (
+        checkpoint["epoch"],
+        checkpoint["best_acc"],
+        checkpoint.get("config", {}),
+    )
 
 
 def train_one_epoch(
@@ -499,15 +571,34 @@ def train_test(log_name, args):
         loss_audio = loss_vision = loss_text = None
 
     best_acc = 0.0
+    start_epoch = 0
     results = ""
     val_results = ""
     test_results = ""
     multi_task_result = ""
 
+    model_config = {
+        "model_to_train": args.model_to_train,
+        "num_encoders": args.num_encoders,
+        "adapter": args.adapter,
+        "adapter_type": args.adapter_type,
+        "fusion_type": getattr(args, "fusion_type", None),
+        "multi": args.multi,
+        "num_frames": config["data"]["video"]["num_frames"],
+    }
+
+    if args.load_checkpoint:
+        print(f"\t Loading checkpoint from {args.load_checkpoint}")
+        start_epoch, best_acc, _ = load_checkpoint(
+            args.load_checkpoint, model, optimizer, args.device
+        )
+        start_epoch += 1
+        print(f"\t Resuming from epoch {start_epoch}, best_acc: {best_acc:.5f}")
+
     print("\t Started Training")
     if args.multi:
         print("\t Multitask learning")
-    for epoch in range(args.num_epochs):
+    for epoch in range(start_epoch, args.num_epochs):
 
         if (epoch + 1) % 5 == 0:
             print("\t\t Epoch....", epoch + 1)
@@ -566,6 +657,19 @@ def train_test(log_name, args):
                 val_preds.cpu().numpy(),
                 target_names=["truth", "deception"],
             )
+            
+            if args.save_best_only:
+                best_path = save_checkpoint(
+                    args.checkpoint_dir,
+                    args.model_name,
+                    model,
+                    optimizer,
+                    epoch,
+                    best_acc,
+                    model_config,
+                    is_best=True,
+                )
+                print(f"\t Saved best model to {best_path} (val_acc: {val_acc:.5f})")
 
     print("\nEvaluating on test set...")
     test_loss, test_preds, test_labels, test_preds_multi, test_labels_multi = (
@@ -605,6 +709,20 @@ def train_test(log_name, args):
     f.write(test_report)
     f.write("\n\n")
     f.write(multi_task_result)
+    
+    final_path = save_checkpoint(
+        args.checkpoint_dir,
+        args.model_name + "_final",
+        model,
+        optimizer,
+        args.num_epochs - 1,
+        best_acc,
+        model_config,
+        is_best=False,
+    )
+    print(f"\nSaved final model to {final_path}")
+    f.write(f"\n\nFinal model saved to: {final_path}")
+    f.write(f"\nBest model saved to: {args.checkpoint_dir}/{args.model_name}_best.pt")
 
     f.close()
 
