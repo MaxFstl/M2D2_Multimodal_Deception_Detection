@@ -1,11 +1,10 @@
 # FROM: https://github.com/NMS05/Audio-Visual-Deception-Detection-DOLOS-Dataset-and-Parameter-Efficient-Crossmodal-Learning/blob/main/scripts/dataloader/audio_visual_dataset.py
-
 import os
 import random
 import numpy as np
 import pandas as pd
 from PIL import Image
-from typing import Dict, List, Optional, Set
+from typing import Dict, List, Optional, Union
 
 import torch
 from torch.utils.data import Dataset
@@ -14,6 +13,10 @@ from scipy.io import wavfile
 from scipy import signal
 from transformers import BertTokenizer
 
+from src.data.validation import validate_clips
+from src.utils.logging import get_logger
+
+logger = get_logger(__name__)
 
 _TOKENIZER_CACHE: Optional[BertTokenizer] = None
 
@@ -28,19 +31,26 @@ def _get_tokenizer() -> BertTokenizer:
 class DOLOSDataset(Dataset):
     def __init__(
         self,
-        annotations_file: str,
+        annotations: Union[str, pd.DataFrame],
         audio_dir: str,
         img_dir: str,
-        texts: Optional[List[str]] = None,
+        texts: Optional[Dict[str, str]] = None,
         num_frames: int = 16,
         frame_size: int = 224,
         num_audio_tokens: int = 64,
         use_mock_text: bool = True,
         text_max_length: int = 512,
-        valid_clips: Optional[Set[str]] = None,
+        skip_validation: bool = False,
     ):
         super().__init__()
-        self.annos = pd.read_csv(annotations_file)
+
+        if isinstance(annotations, str):
+            self.annos = pd.read_csv(annotations)
+            annotations_file = annotations
+        else:
+            self.annos = annotations.copy().reset_index(drop=True)
+            annotations_file = None
+
         self.audio_dir = audio_dir
         self.img_dir = img_dir
         self.num_frames = num_frames
@@ -49,12 +59,22 @@ class DOLOSDataset(Dataset):
         self.use_mock_text = use_mock_text
         self.text_max_length = text_max_length
 
-        if valid_clips is not None:
-            self.annos = self.annos[
-                self.annos.iloc[:, 1].isin(valid_clips)
-            ].reset_index(drop=True)
+        if not skip_validation and annotations_file is not None:
+            original_count = len(self.annos)
+            valid_clips, missing_clips = validate_clips(
+                annotations_file, audio_dir, img_dir
+            )
 
-        self.texts = texts if texts is not None else [None] * len(self.annos)
+            if missing_clips:
+                self.annos = self.annos[
+                    self.annos.iloc[:, 1].isin(valid_clips)
+                ].reset_index(drop=True)
+                logger.info(
+                    f"Filtered {len(missing_clips)} missing clips, "
+                    f"keeping {len(self.annos)}/{original_count} clips"
+                )
+
+        self.texts = texts if texts is not None else {}
 
         self.video_transform = T.Compose(
             [
@@ -134,15 +154,18 @@ class DOLOSDataset(Dataset):
         return torch.stack(face_frames, 0).float()
 
     def _load_text(self, idx: int, clip_name: str) -> str:
-        if self.use_mock_text or self.texts[idx] is None:
+        if self.use_mock_text or clip_name not in self.texts:
             return self._get_mock_transcript(clip_name)
-        return self.texts[idx]
+        return self.texts[clip_name]
 
     def _parse_label(self, idx: int) -> int:
         str_label = self.annos.iloc[idx, -1]
-        if str_label == "truth":
+        if str_label.lower().strip() == "truth":
             return 0
-        elif str_label == "deception":
+        elif (
+            str_label.lower().strip() == "deception"
+            or str_label.lower().strip() == "lie"
+        ):
             return 1
         raise ValueError(f"Undefined label: {str_label}")
 

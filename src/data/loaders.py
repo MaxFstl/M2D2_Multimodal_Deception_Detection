@@ -1,5 +1,4 @@
-from typing import Dict, List, Optional, Tuple
-import os
+from typing import Dict, Optional, Tuple
 
 import numpy as np
 import pandas as pd
@@ -7,6 +6,10 @@ from sklearn.model_selection import StratifiedShuffleSplit
 from torch.utils.data import DataLoader, WeightedRandomSampler
 
 from src.data.dataset import DOLOSDataset, multimodal_collate_fn
+from src.data.validation import validate_clips
+from src.utils.logging import get_logger
+
+logger = get_logger(__name__)
 
 
 def create_dataloaders(
@@ -14,21 +17,25 @@ def create_dataloaders(
     audio_dir: str,
     img_dir: str,
     config: Dict,
-    texts: Optional[List[str]] = None,
+    texts: Optional[Dict[str, str]] = None,
     use_mock_text: bool = True,
     num_workers: int = 4,
     pin_memory: bool = True,
 ) -> Tuple[DataLoader, DataLoader, DataLoader]:
     annos = pd.read_csv(annotations_file)
+    original_count = len(annos)
+    
+    valid_clips, missing_clips = validate_clips(annotations_file, audio_dir, img_dir)
+    
+    if missing_clips:
+        annos = annos[annos.iloc[:, 1].isin(valid_clips)].reset_index(drop=True)
+        logger.info(
+            f"Filtered {len(missing_clips)} missing clips for dataloader creation, "
+            f"keeping {len(annos)}/{original_count} clips"
+        )
+    
+    clip_names = annos.iloc[:, 1].tolist()
     labels = annos.iloc[:, -1].apply(lambda x: 0 if x == "truth" else 1).tolist()
-
-    existing_audio = {
-        f.replace(".wav", "") for f in os.listdir(audio_dir) if f.endswith(".wav")
-    }
-    existing_video = {
-        d for d in os.listdir(img_dir) if os.path.isdir(os.path.join(img_dir, d))
-    }
-    valid_clips = existing_audio & existing_video
 
     train_split = config.get("train_split", 0.7)
     val_split = config.get("val_split", 0.15)
@@ -53,40 +60,52 @@ def create_dataloaders(
         sample_weights, len(sample_weights), replacement=True
     )
 
+    train_clips = set(clip_names[i] for i in train_idx)
+    val_clips = set(clip_names[i] for i in val_idx)
+    test_clips = set(clip_names[i] for i in test_idx)
+    
+    train_texts = {k: v for k, v in texts.items() if k in train_clips} if texts else None
+    val_texts = {k: v for k, v in texts.items() if k in val_clips} if texts else None
+    test_texts = {k: v for k, v in texts.items() if k in test_clips} if texts else None
+
+    train_annos = annos[annos.iloc[:, 1].isin(train_clips)].reset_index(drop=True)
+    val_annos = annos[annos.iloc[:, 1].isin(val_clips)].reset_index(drop=True)
+    test_annos = annos[annos.iloc[:, 1].isin(test_clips)].reset_index(drop=True)
+
     train_dataset = DOLOSDataset(
-        annotations_file=annotations_file,
+        annotations=train_annos,
         audio_dir=audio_dir,
         img_dir=img_dir,
-        texts=[texts[i] if texts else None for i in train_idx] if texts else None,
+        texts=train_texts,
         num_frames=config.get("num_frames", 16),
         frame_size=config.get("frame_size", 224),
         num_audio_tokens=config.get("num_audio_tokens", 64),
         use_mock_text=use_mock_text,
-        valid_clips=valid_clips,
+        skip_validation=True,
     )
 
     val_dataset = DOLOSDataset(
-        annotations_file=annotations_file,
+        annotations=val_annos,
         audio_dir=audio_dir,
         img_dir=img_dir,
-        texts=[texts[i] if texts else None for i in val_idx] if texts else None,
+        texts=val_texts,
         num_frames=config.get("num_frames", 16),
         frame_size=config.get("frame_size", 224),
         num_audio_tokens=config.get("num_audio_tokens", 64),
         use_mock_text=use_mock_text,
-        valid_clips=valid_clips,
+        skip_validation=True,
     )
 
     test_dataset = DOLOSDataset(
-        annotations_file=annotations_file,
+        annotations=test_annos,
         audio_dir=audio_dir,
         img_dir=img_dir,
-        texts=[texts[i] if texts else None for i in test_idx] if texts else None,
+        texts=test_texts,
         num_frames=config.get("num_frames", 16),
         frame_size=config.get("frame_size", 224),
         num_audio_tokens=config.get("num_audio_tokens", 64),
         use_mock_text=use_mock_text,
-        valid_clips=valid_clips,
+        skip_validation=True,
     )
 
     batch_size = config.get("batch_size", 16)

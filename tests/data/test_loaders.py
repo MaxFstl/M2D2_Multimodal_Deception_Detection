@@ -1,9 +1,7 @@
-import os
 import numpy as np
 import pandas as pd
 import pytest
 import torch
-from unittest.mock import MagicMock, patch
 
 from src.data.dataset import DOLOSDataset, multimodal_collate_fn, _get_tokenizer
 
@@ -45,7 +43,7 @@ class TestDOLOSDataset:
 
     def test_dataset_length(self, test_data_dir):
         dataset = DOLOSDataset(
-            annotations_file=test_data_dir["annotations_file"],
+            annotations=test_data_dir["annotations_file"],
             audio_dir=test_data_dir["audio_dir"],
             img_dir=test_data_dir["img_dir"],
             use_mock_text=True,
@@ -54,7 +52,7 @@ class TestDOLOSDataset:
 
     def test_dataset_returns_dict_with_all_modalities(self, test_data_dir):
         dataset = DOLOSDataset(
-            annotations_file=test_data_dir["annotations_file"],
+            annotations=test_data_dir["annotations_file"],
             audio_dir=test_data_dir["audio_dir"],
             img_dir=test_data_dir["img_dir"],
             use_mock_text=True,
@@ -70,7 +68,7 @@ class TestDOLOSDataset:
 
     def test_label_parsing(self, test_data_dir):
         dataset = DOLOSDataset(
-            annotations_file=test_data_dir["annotations_file"],
+            annotations=test_data_dir["annotations_file"],
             audio_dir=test_data_dir["audio_dir"],
             img_dir=test_data_dir["img_dir"],
             use_mock_text=True,
@@ -82,7 +80,7 @@ class TestDOLOSDataset:
 
     def test_mock_text_generation(self, test_data_dir):
         dataset = DOLOSDataset(
-            annotations_file=test_data_dir["annotations_file"],
+            annotations=test_data_dir["annotations_file"],
             audio_dir=test_data_dir["audio_dir"],
             img_dir=test_data_dir["img_dir"],
             use_mock_text=True,
@@ -92,7 +90,7 @@ class TestDOLOSDataset:
 
     def test_video_frames_shape(self, test_data_dir):
         dataset = DOLOSDataset(
-            annotations_file=test_data_dir["annotations_file"],
+            annotations=test_data_dir["annotations_file"],
             audio_dir=test_data_dir["audio_dir"],
             img_dir=test_data_dir["img_dir"],
             num_frames=16,
@@ -103,21 +101,33 @@ class TestDOLOSDataset:
         assert item["video"].shape == (16, 3, 224, 224)
 
     def test_custom_texts_passed_through(self, test_data_dir):
-        custom_texts = [
-            "custom text 1",
-            "custom text 2",
-            "custom text 3",
-            "custom text 4",
-        ]
+        custom_texts = {
+            "clip_001": "custom text 1",
+            "clip_002": "custom text 2",
+            "clip_003": "custom text 3",
+            "clip_004": "custom text 4",
+        }
         dataset = DOLOSDataset(
-            annotations_file=test_data_dir["annotations_file"],
+            annotations=test_data_dir["annotations_file"],
             audio_dir=test_data_dir["audio_dir"],
             img_dir=test_data_dir["img_dir"],
             texts=custom_texts,
             use_mock_text=False,
         )
+        clip_names = ["clip_001", "clip_002", "clip_003", "clip_004"]
         for i in range(len(dataset)):
-            assert dataset[i]["text"] == custom_texts[i]
+            assert dataset[i]["text"] == custom_texts[clip_names[i]]
+
+    def test_dataset_accepts_dataframe(self, test_data_dir):
+        annos = pd.read_csv(test_data_dir["annotations_file"])
+        dataset = DOLOSDataset(
+            annotations=annos,
+            audio_dir=test_data_dir["audio_dir"],
+            img_dir=test_data_dir["img_dir"],
+            use_mock_text=True,
+            skip_validation=True,
+        )
+        assert len(dataset) == 4
 
 
 class TestMultimodalCollateFn:
@@ -196,3 +206,231 @@ class TestTokenizer:
         tokenizer1 = _get_tokenizer()
         tokenizer2 = _get_tokenizer()
         assert tokenizer1 is tokenizer2
+
+
+class TestCreateDataLoaders:
+    @pytest.fixture
+    def test_data_dir(self, tmp_path):
+        annos = pd.DataFrame(
+            {
+                "video_id": ["vid001"] * 20,
+                "file_name": [f"clip_{i:03d}" for i in range(20)],
+                "start_time": ["0:00"] * 20,
+                "end_time": ["0:05"] * 20,
+                "label": ["truth"] * 10 + ["deception"] * 10,
+            }
+        )
+        annos.to_csv(str(tmp_path / "annotations.csv"), index=False)
+
+        for i in range(20):
+            clip = f"clip_{i:03d}"
+            clip_dir = tmp_path / clip
+            clip_dir.mkdir()
+            for j in range(16):
+                img = np.random.randint(0, 255, (224, 224, 3), dtype=np.uint8)
+                from PIL import Image
+
+                Image.fromarray(img).save(str(clip_dir / f"frame_{j:04d}.jpg"))
+
+            import soundfile as sf
+
+            audio_path = tmp_path / f"{clip}.wav"
+            waveform = np.random.randn(16000).astype(np.float32)
+            sf.write(str(audio_path), waveform, 16000)
+
+        return {
+            "annotations_file": str(tmp_path / "annotations.csv"),
+            "audio_dir": str(tmp_path),
+            "img_dir": str(tmp_path),
+        }
+
+    def test_returns_three_loaders(self, test_data_dir):
+        from src.data.loaders import create_dataloaders
+
+        config = {
+            "batch_size": 4,
+            "num_frames": 16,
+            "frame_size": 224,
+            "num_audio_tokens": 64,
+            "train_split": 0.7,
+            "val_split": 0.15,
+            "test_split": 0.15,
+            "class_weights": [1.0, 1.0],
+        }
+        train_loader, val_loader, test_loader = create_dataloaders(
+            annotations_file=test_data_dir["annotations_file"],
+            audio_dir=test_data_dir["audio_dir"],
+            img_dir=test_data_dir["img_dir"],
+            config=config,
+            use_mock_text=True,
+            num_workers=0,
+        )
+        assert train_loader is not None
+        assert val_loader is not None
+        assert test_loader is not None
+
+    def test_correct_batch_size(self, test_data_dir):
+        from src.data.loaders import create_dataloaders
+
+        config = {
+            "batch_size": 4,
+            "num_frames": 16,
+            "frame_size": 224,
+            "num_audio_tokens": 64,
+            "train_split": 0.7,
+            "val_split": 0.15,
+            "test_split": 0.15,
+            "class_weights": [1.0, 1.0],
+        }
+        train_loader, val_loader, test_loader = create_dataloaders(
+            annotations_file=test_data_dir["annotations_file"],
+            audio_dir=test_data_dir["audio_dir"],
+            img_dir=test_data_dir["img_dir"],
+            config=config,
+            use_mock_text=True,
+            num_workers=0,
+        )
+        batch = next(iter(train_loader))
+        assert batch["video"].shape[0] <= 4
+
+    def test_train_loader_has_sampler(self, test_data_dir):
+        from src.data.loaders import create_dataloaders
+
+        config = {
+            "batch_size": 4,
+            "num_frames": 16,
+            "frame_size": 224,
+            "num_audio_tokens": 64,
+            "train_split": 0.7,
+            "val_split": 0.15,
+            "test_split": 0.15,
+            "class_weights": [1.0, 1.5],
+        }
+        train_loader, _, _ = create_dataloaders(
+            annotations_file=test_data_dir["annotations_file"],
+            audio_dir=test_data_dir["audio_dir"],
+            img_dir=test_data_dir["img_dir"],
+            config=config,
+            use_mock_text=True,
+            num_workers=0,
+        )
+        from torch.utils.data import WeightedRandomSampler
+
+        assert isinstance(train_loader.sampler, WeightedRandomSampler)
+
+
+class TestDataLeakage:
+    @pytest.fixture
+    def test_data_dir(self, tmp_path):
+        annos = pd.DataFrame(
+            {
+                "video_id": ["vid001"] * 100,
+                "file_name": [f"clip_{i:03d}" for i in range(100)],
+                "start_time": ["0:00"] * 100,
+                "end_time": ["0:05"] * 100,
+                "label": ["truth"] * 50 + ["deception"] * 50,
+            }
+        )
+        annos.to_csv(str(tmp_path / "annotations.csv"), index=False)
+
+        for i in range(100):
+            clip = f"clip_{i:03d}"
+            clip_dir = tmp_path / clip
+            clip_dir.mkdir()
+            for j in range(16):
+                img = np.random.randint(0, 255, (224, 224, 3), dtype=np.uint8)
+                from PIL import Image
+
+                Image.fromarray(img).save(str(clip_dir / f"frame_{j:04d}.jpg"))
+
+            import soundfile as sf
+
+            audio_path = tmp_path / f"{clip}.wav"
+            waveform = np.random.randn(16000).astype(np.float32)
+            sf.write(str(audio_path), waveform, 16000)
+
+        return {
+            "annotations_file": str(tmp_path / "annotations.csv"),
+            "audio_dir": str(tmp_path),
+            "img_dir": str(tmp_path),
+        }
+
+    def test_no_clip_overlap_train_val_test(self, test_data_dir):
+        from src.data.loaders import create_dataloaders
+
+        config = {
+            "batch_size": 8,
+            "num_frames": 16,
+            "frame_size": 224,
+            "num_audio_tokens": 64,
+            "train_split": 0.7,
+            "val_split": 0.15,
+            "test_split": 0.15,
+            "class_weights": [1.0, 1.0],
+        }
+        train_loader, val_loader, test_loader = create_dataloaders(
+            annotations_file=test_data_dir["annotations_file"],
+            audio_dir=test_data_dir["audio_dir"],
+            img_dir=test_data_dir["img_dir"],
+            config=config,
+            use_mock_text=True,
+            num_workers=0,
+        )
+
+        train_clips = set(train_loader.dataset.annos.iloc[:, 1].tolist())
+        val_clips = set(val_loader.dataset.annos.iloc[:, 1].tolist())
+        test_clips = set(test_loader.dataset.annos.iloc[:, 1].tolist())
+
+        assert len(train_clips & val_clips) == 0, "Train/val overlap detected"
+        assert len(train_clips & test_clips) == 0, "Train/test overlap detected"
+        assert len(val_clips & test_clips) == 0, "Val/test overlap detected"
+
+    def test_all_clips_accounted_for(self, test_data_dir):
+        from src.data.loaders import create_dataloaders
+
+        config = {
+            "batch_size": 8,
+            "num_frames": 16,
+            "frame_size": 224,
+            "num_audio_tokens": 64,
+            "train_split": 0.7,
+            "val_split": 0.15,
+            "test_split": 0.15,
+            "class_weights": [1.0, 1.0],
+        }
+        train_loader, val_loader, test_loader = create_dataloaders(
+            annotations_file=test_data_dir["annotations_file"],
+            audio_dir=test_data_dir["audio_dir"],
+            img_dir=test_data_dir["img_dir"],
+            config=config,
+            use_mock_text=True,
+            num_workers=0,
+        )
+
+        train_clips = set(train_loader.dataset.annos.iloc[:, 1].tolist())
+        val_clips = set(val_loader.dataset.annos.iloc[:, 1].tolist())
+        test_clips = set(test_loader.dataset.annos.iloc[:, 1].tolist())
+
+        all_clips = train_clips | val_clips | test_clips
+        assert len(all_clips) == 100
+
+
+class TestClassDistribution:
+    def test_stratified_across_splits(self):
+        from sklearn.model_selection import StratifiedShuffleSplit
+
+        labels = [0] * 70 + [1] * 30
+        indices = np.arange(100)
+
+        sss = StratifiedShuffleSplit(n_splits=1, train_size=0.7, random_state=42)
+        train_idx, temp_idx = next(sss.split(np.zeros(len(labels)), labels))
+
+        train_labels = [labels[i] for i in train_idx]
+        temp_labels = [labels[i] for i in temp_idx]
+
+        train_class_ratio = sum(train_labels) / len(train_labels)
+        temp_class_ratio = sum(temp_labels) / len(temp_labels)
+        original_ratio = sum(labels) / len(labels)
+
+        assert abs(train_class_ratio - original_ratio) < 0.05
+        assert abs(temp_class_ratio - original_ratio) < 0.05

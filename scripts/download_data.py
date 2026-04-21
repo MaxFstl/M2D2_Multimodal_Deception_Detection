@@ -6,6 +6,7 @@ from multiprocessing.pool import ThreadPool
 from src.utils.load_config import load_config
 from src.utils.face.extract_face_frames import extract_face
 from src.utils.video_to_audio import extract_audio
+from src.utils.wav_to_txt import transcribeAudio
 
 config = load_config()
 
@@ -29,6 +30,7 @@ csv_file = config["paths"]["timestamps"]
 out_dir = video_dir
 save_dir_face = config["paths"]["image_dir"]
 save_dir_audio = config["paths"]["audio_dir"]
+text_dir = config["paths"]["text_dir"]
 
 
 def start_download(video_dir, csv_file, cookiefile=None, sleep=0):
@@ -70,3 +72,4 @@ start_download(video_dir, csv_file, args.cookies, args.sleep)
 print("Preprocessing...")
 extract_face(root_dir=video_dir, save_dir=save_dir_face)
 extract_audio(video_dir=video_dir, save_dir=save_dir_audio)
+transcribeAudio(audio_dir=save_dir_audio, out_dir=text_dir)

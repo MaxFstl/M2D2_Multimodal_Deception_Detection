@@ -131,4 +131,4 @@ class ViT_model(nn.Module):
         return torch.mean(logits, 1)
 
 
-# model = ViT_model(num_encoders=4, adapter=True, adapter_type="nlp")
+# model = ViT_model(num_encoders=4, adapter=True, adapter_type='nlp')
