@@ -8,6 +8,13 @@ This efficient setup allows the model to capture subtle, fleeting deceptive beha
 
 We build a new modality into the system. We synthesise text from the audio data and feed it into the model too.
 
+\subsection{The Bert Model}
+
+\subsection{The Wav2Vec Model}
+
+\subsection{The Vision Transformer}
+For the feature generation of the visiual branch, we use the Vision Transformer(ViT). 
+
 \subsection{Uniform Temporal Adapters (UT-Adapters)}
 To avoid the heavy computational cost of retraining massive audio, visual and language models, the base weights of the encoders are completely frozen. 
 Instead, the architecture introduces small, trainable modules called Uniform Temporal Adapters (UT-Adapters). 
