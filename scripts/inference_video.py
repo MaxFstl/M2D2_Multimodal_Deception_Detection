@@ -196,7 +196,7 @@ class VideoDeceptionDetector:
                 logits, _, _, _ = self.model(audio_input, video_tensor, input_ids, attention_mask)
 
                 probs = torch.softmax(logits, dim=-1)
-                pred_class: int = torch.argmax(logits, dim=-1).item()
+                pred_class = int(torch.argmax(logits, dim=-1).item())
                 confidence = probs[0, pred_class].item()
 
         elapsed_time = time.time() - start_time
