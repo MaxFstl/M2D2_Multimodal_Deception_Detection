@@ -13,7 +13,20 @@ We build a new modality into the system. We synthesise text from the audio data 
 \subsection{The Wav2Vec Model}
 
 \subsection{The Vision Transformer}
-For the feature generation of the visiual branch, we use the Vision Transformer (ViT) \cite{DBLP:journals/corr/abs-2010-11929}.  
+For the feature generation of the visiual branch, we use the Vision Transformer (ViT) \cite{DBLP:journals/corr/abs-2010-11929}.
+Every video clip is split into 64 individual frames. These frames are input into the ViT, see figure \ref{fig:ViT}.
+Every image is then split into non-overlapping patches of size $16x16$, flattened and linearly projected. 
+These patches are then embedded and receive a positional embedding, so the attention mechansim knows which position 
+the patches have been in the original image. Then a transformer encoder layer attends the patches with each other and a MLP
+at the end outputs a classification. Since we have 64 output vectors, we take the average output and pass it to the fusion model.
+
+\begin{figure}[t]
+  \centering
+   \includegraphics[width=0.8\linewidth]{images/ViT.png}
+   \caption{The architecture of the ViT}
+   \label{fig:ViT}
+\end{figure}
+
 
 \subsection{Uniform Temporal Adapters (UT-Adapters)}
 To avoid the heavy computational cost of retraining massive audio, visual and language models, the base weights of the encoders are completely frozen. 
