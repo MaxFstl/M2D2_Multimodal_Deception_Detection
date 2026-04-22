@@ -92,13 +92,13 @@ class VideoDeceptionDetector:
 
         frame_indices = np.linspace(0, total_frames - 1, self.num_frames, dtype=int)
         face_frames = []
-        frame_count = 0
-
         for target_idx in frame_indices:
             cap.set(cv2.CAP_PROP_POS_FRAMES, target_idx)
             ret, frame = cap.read()
+
             if not ret:
                 logger.warning(f"Failed to read frame {target_idx} from {video_path}")
+                face_frames.append(np.zeros((160, 160, 3), dtype=np.uint8))
                 continue
 
             frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
@@ -111,15 +111,16 @@ class VideoDeceptionDetector:
                 logger.warning(f"No face detected in frame {target_idx}")
                 face_frames.append(np.zeros((160, 160, 3), dtype=np.uint8))
 
-            frame_count += 1
-
         cap.release()
 
-        if len(face_frames) == 0:
-            logger.error(f"No valid frames extracted from {video_path}")
-            return None
+        if len(face_frames) < self.num_frames:
+            logger.warning(
+                f"Only {len(face_frames)} frames extracted, padding with zeros"
+            )
+            while len(face_frames) < self.num_frames:
+                face_frames.append(np.zeros((160, 160, 3), dtype=np.uint8))
 
-        return np.array(face_frames)
+        return np.array(face_frames[:self.num_frames])
 
     def preprocess_audio(self, audio_path: str, num_tokens: int = 64) -> torch.Tensor:
         sample_rate, waveform = wavfile.read(audio_path)
