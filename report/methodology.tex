@@ -13,7 +13,7 @@ We build a new modality into the system. We synthesise text from the audio data 
 \subsection{The Wav2Vec Model}
 
 \subsection{The Vision Transformer}
-For the feature generation of the visiual branch, we use the Vision Transformer(ViT). 
+For the feature generation of the visiual branch, we use the Vision Transformer (ViT). 
 
 \subsection{Uniform Temporal Adapters (UT-Adapters)}
 To avoid the heavy computational cost of retraining massive audio, visual and language models, the base weights of the encoders are completely frozen. 
@@ -24,6 +24,12 @@ By using a simple 1D-convolution, the adapters look at neighboring frames or sho
 subtle behaviors—like a fleeting micro-expression or a sudden stutter—that are crucial for spotting deception, 
 without needing millions of trainable parameters.
 
+\begin{figure}[t]
+  \centering
+   \includegraphics[width=0.8\linewidth]{images/UT-adapter.png}
+   \caption{The integration of the UT-Adapters.}
+   \label{fig:UTAdapter}
+\end{figure}
 
 \subsection{Early-Stage Audio-Visual Fusion (PAVF)}
 Many standard models process audio and video entirely separately and only combine the results at the very end. 
