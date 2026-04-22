@@ -13,7 +13,7 @@ We build a new modality into the system. We synthesise text from the audio data 
 \subsection{The Wav2Vec Model}
 
 \subsection{The Vision Transformer}
-For the feature generation of the visiual branch, we use the Vision Transformer (ViT). 
+For the feature generation of the visiual branch, we use the Vision Transformer (ViT) \cite{DBLP:journals/corr/abs-2010-11929}.  
 
 \subsection{Uniform Temporal Adapters (UT-Adapters)}
 To avoid the heavy computational cost of retraining massive audio, visual and language models, the base weights of the encoders are completely frozen. 
@@ -27,7 +27,7 @@ without needing millions of trainable parameters.
 \begin{figure}[t]
   \centering
    \includegraphics[width=0.8\linewidth]{images/UT-adapter.png}
-   \caption{The integration of the UT-Adapters.}
+   \caption{The integration of the UT-Adapters in the encoeder layers.}
    \label{fig:UTAdapter}
 \end{figure}
 
@@ -40,3 +40,10 @@ They calculate the correlation between the two streams, allowing them to continu
 This means the visual network knows exactly what the audio network is hearing—and 
 vice versa—creating a highly synchronized representation of the person's behavior before a final prediction is made.
 We extended this system to also fuse language features into the system.
+
+\begin{figure}[t]
+  \centering
+   \includegraphics[width=0.8\linewidth]{images/Fusion-module.png}
+   \caption{The main architecture of the original model.}
+   \label{fig:FusionModule}
+\end{figure}
