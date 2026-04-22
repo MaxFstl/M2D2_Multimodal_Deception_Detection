@@ -77,7 +77,7 @@ class VideoDeceptionDetector:
         audio = video.audio
         if audio is None:
             raise ValueError(f"No audio track found in video: {video_path}")
-        audio.write_audiofile(output_path, verbose=False, logger=None)
+        audio.write_audiofile(output_path)
         video.close()
         return output_path
 
