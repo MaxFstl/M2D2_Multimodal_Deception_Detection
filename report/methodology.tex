@@ -40,7 +40,7 @@ without needing millions of trainable parameters.
 \begin{figure}[t]
   \centering
    \includegraphics[width=0.8\linewidth]{images/UT-adapter.png}
-   \caption{The integration of the UT-Adapters in the encoeder layers.}
+   \caption{The integration of the UT-Adapters in the encoeder layers. Learnable layers are marked by fire, while frozen layers are marked by snowflakes}
    \label{fig:UTAdapter}
 \end{figure}
 
@@ -56,7 +56,14 @@ We extended this system to also fuse language features into the system.
 
 \begin{figure}[t]
   \centering
-   \includegraphics[width=0.8\linewidth]{images/Fusion-module.png}
+   \includegraphics[width=0.8\linewidth]{images/PAVF.png}
+   \caption{The PAVF module.}
+   \label{fig:PAVF}
+\end{figure}
+
+\begin{figure*}[t]
+  \centering
+   \includegraphics[width=\linewidth]{images/Fusion-module.png}
    \caption{The main architecture of the original model.}
    \label{fig:FusionModule}
-\end{figure}
+\end{figure*}
