@@ -3,6 +3,8 @@ __pycache__/
 *.py[codz]
 *$py.class
 
+*.pt
+!checkpoints\DOLOS_fusion_Encoders_4_Adapter_True_type_nlp_best.pt
 *.md
 !README.md
 # C extensions
