@@ -6,8 +6,21 @@ Every video clip was cut into 64 frames. Afterwards the frame is cropped to the 
 --INFO FOR AUDIO AND TEXT---
 
 \subsection{Model Details and Training}
+The model was trained for 15 epochs. We used a batchsize of 16, learning rate of 0.0001 and utilized early stopping to prevent overfitting.
+To prevent overfitting further, weight decay and gradient clipping is used as a regularizer with a value of 0.01 and 1.0 respectively. 
 
+\subsection{Results}
+The model achieved an accuracy of 0.55, which is almost the accuracy of the original paper. With more computing power, a better
+result can be expected. The confusion matrix (figure \ref{fig:conf}) shows, that the model can detect truth and lies evenly and 
+does not collapse to only guessing one outcome. 
+
+\begin{figure}[t]
+  \centering
+   \includegraphics[width=0.8\linewidth]{images/confusion_matrix_fusion_20260424_104611.png}
+   \caption{Confusion matrix of the final model}
+   \label{fig:conf}
+\end{figure}
 
 \subsubsection{Text Part Results}
 
-The notebook shows that the Whisper transcription pipeline, BERT-LoRA fine-tuning, model saving, and inference stages run successfully. The trained LoRA model is saved to \texttt{./bert\_lie\_truth\_lora}. In the recorded run, training completed after 400 steps with final training loss 0.170 and runtime 403.5 seconds. Only 296,450 parameters are trainable out of roughly 109.8 million total parameters, meaning the text branch trains about 0.27\% of the model parameters. Example inference outputs include both deceptive and truthful predictions. A remaining evaluation step is to run validation inference and the  accuracy is 0.6957, precision is 0.6667, recall, and F1 is 0.8 on the held-out 15\% test split.
+The notebook shows that the Whisper transcription pipeline, BERT-LoRA fine-tuning, model saving, and inference stages run successfully. The trained LoRA model is saved to \texttt{./bert\_lie\_truth\_lora}. In the recorded run, training completed after 400 steps with final training loss 0.170 and runtime 403.5 seconds. Only 296,450 parameters are trainable out of roughly 109.8 million total parameters, meaning the text branch trains about 0.27\% of the model parameters. Example inference outputs include both deceptive and truthful predictions. A remaining evaluation step is to run validation inference and the  accuracy is 0.5512, precision is 0.5495, recall is 0.99, and F1 is 0.70 on the held-out 15\% test split.
