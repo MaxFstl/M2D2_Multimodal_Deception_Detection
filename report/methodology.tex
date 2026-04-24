@@ -28,7 +28,7 @@ During training, transcripts are tokenized with BERT tokenization and truncated 
 
 
 \subsection{The Wav2Vec Model}
-For the acoustic feature extraction of the audio branch, we employ the Wav2Vec2-base model \cite{baevski2020wav2vec2} pre-trained on 960 hours of Librispeech. The raw waveform is resampled to 16 kHz and each utterance is fixed to a duration of 5 seconds (padding or truncating as necessary). To adapt the model to the binary deception detection task (truth/lie), we adopt a parameter-efficient fine-tuning strategy: the entire pre-trained feature encoder and the projection layer are frozen, while only the last \(N\) Transformer encoder layers (\(N \in \{2,\dots,6\}\)) together with a lightweight classifier head (768 → 2) are trainable. This design greatly reduces the number of trainable parameters and mitigates overfitting on the DOLOS dataset.
+To find the optimal configuration for the audio branch, we perform a preliminary independent optimization. During this phase, we adopt a parameter-efficient strategy where the feature encoder is frozen, and only the last $N$ Transformer layers ($N \in \{2, \dots, 6\}$) and a classifier head are trainable. The results of this optimization (including the specific value of $N$ and the adapter type) define the fixed audio backbone used in the subsequent multimodal joint training.\\
 
 Two types of adapters are inserted into the frozen Transformer blocks to further improve efficiency and flexibility. 
 Figure~\ref{fig:nlp_adapter} shows the NLP‑style adapter, which follows a serial bottleneck structure: \(768 \rightarrow 256 \rightarrow 768\) with ReLU activation and residual connection. 
