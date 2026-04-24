@@ -15,6 +15,7 @@ dependencies = [
     "openai-whisper>=20250625",
     "opencv-python>=4.13.0.92",
     "pandas>=1.1.5",
+    "peft>=0.19.1",
     "pydantic>=2.5.3",
     "pytest>=7.4.4",
     "pytest-cov>=4.1.0",
