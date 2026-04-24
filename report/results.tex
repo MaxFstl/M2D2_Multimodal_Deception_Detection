@@ -3,7 +3,20 @@
 This section covers the the data preprocessing, model details and training, as well as the qualitative results achieved.
 \subsection{Data Preprocessing}
 Every video clip was cut into 64 frames. Afterwards the frame is cropped to the face and transformed to be $160x160$ pixels.
---INFO FOR AUDIO AND TEXT---
+--INFO FOR AUDIO AND TEXT--- 
 
 \subsection{Model Details and Training}
-The model was trained for 15 epochs. We used a batch_size of 16, learning rate of 0.0001 and utilized early stopping to prevent overfitting.
+The model was trained for 15 epochs. We used a batchsize of 16, learning rate of 0.0001 and utilized early stopping to prevent overfitting.
+To prevent overfitting further, weight decay and gradient clipping is used as a regularizer with a value of 0.01 and 1.0 respectively. 
+
+\subsection{Results}
+The model achieved an accuracy of 0.55, which is almost the accuracy of the original paper. With more computing power, a better
+result can be expected. The confusion matrix (figure \ref{fig:conf}) shows, that the model can detect truth and lies evenly and 
+does not collapse to only guessing one outcome. 
+
+\begin{figure}[t]
+  \centering
+   \includegraphics[width=0.8\linewidth]{images/confusion_matrix_fusion_20260424_104611.png}
+   \caption{Confusion matrix of the final model}
+   \label{fig:conf}
+\end{figure}
