@@ -1,6 +1,18 @@
 \section{Results}
 \label{sec:results}
-This section covers the model details and training, as well as the qualitative results achieved.
+This section covers the the data preprocessing, model details and training, as well as the qualitative results achieved.
+\subsection{Data Preprocessing}
+Every video clip was cut into 64 frames. Afterwards the frame is cropped to the face and transformed to be $160x160$ pixels.
+
+\subsection{Hyperparameter Optimisation}
+For training the audio branch, we use the AdamW optimizer with a cross‑entropy loss. To find a good configuration on the DOLOS dataset, we perform hyperparameter search using Optuna over 20 trials. The search space includes:
+\begin{itemize}
+    \item Learning rate: log-uniform from \(5\times10^{-5}\) to \(3\times10^{-4}\)
+    \item Batch size: 4 or 8
+    \item Number of trainable encoder layers \(N\): integer from 2 to 6
+    \item Adapter type: {\tt conv} or {\tt nlp}
+\end{itemize}
+For each trial, the model is trained for 10 epochs with a 90/10 training‑validation split. After the best hyperparameter combination is identified, a final training run of 50 epochs is performed on the full training set, and the validation metrics (accuracy, precision, recall, F1) are recorded. The resulting audio branch produces a 768‑dimensional feature vector per clip (obtained from the average of the last layer’s outputs), which is then passed to the later fusion module.
 
 \subsection{Model Details and Training}
 The model was trained for 15 epochs. We used a batchsize of 16, learning rate of 0.0001 and utilized early stopping to prevent overfitting.

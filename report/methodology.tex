@@ -28,6 +28,26 @@ During training, transcripts are tokenized with BERT tokenization and truncated 
 
 
 \subsection{The Wav2Vec Model}
+For the acoustic feature extraction of the audio branch, we employ the Wav2Vec2-base model \cite{baevski2020wav2vec2} pre-trained on 960 hours of Librispeech. The raw waveform is resampled to 16 kHz and each utterance is fixed to a duration of 5 seconds (padding or truncating as necessary). To adapt the model to the binary deception detection task (truth/lie), we adopt a parameter-efficient fine-tuning strategy: the entire pre-trained feature encoder and the projection layer are frozen, while only the last \(N\) Transformer encoder layers (\(N \in \{2,\dots,6\}\)) together with a lightweight classifier head (768 → 2) are trainable. This design greatly reduces the number of trainable parameters and mitigates overfitting on the DOLOS dataset.
+
+Two types of adapters are inserted into the frozen Transformer blocks to further improve efficiency and flexibility. 
+Figure~\ref{fig:nlp_adapter} shows the NLP‑style adapter, which follows a serial bottleneck structure: \(768 \rightarrow 256 \rightarrow 768\) with ReLU activation and residual connection. 
+Figure~\ref{fig:conv_adapter} illustrates the Conv‑style adapter, which runs in parallel with the main path: it consists of a 1‑D convolutional layer (\(768 \rightarrow 32\)), a depthwise temporal convolution, and a projection back to 768, then fused with the original MHSA output via element-wise addition before layer normalisation. 
+The former is more parameter‑efficient, while the latter captures local temporal patterns better.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=1\linewidth]{images/NLP.png}
+  \caption{The architecture of the NLP-style adapter.}
+  \label{fig:nlp_adapter}
+\end{figure}
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=1\linewidth]{images/Conv.png}
+  \caption{The architecture of the Conv-style adapter.}
+  \label{fig:conv_adapter}
+\end{figure}
 
 \subsection{The Vision Transformer}
 For the feature generation of the visiual branch, we use the Vision Transformer (ViT) \cite{DBLP:journals/corr/abs-2010-11929}.
