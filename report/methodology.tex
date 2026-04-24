@@ -8,6 +8,11 @@ This efficient setup allows the model to capture subtle, fleeting deceptive beha
 
 We build a new modality into the system. We synthesise text from the audio data and feed it into the model too.
 
+\subsection{Data Preprocessing}
+Every video clip was cut into 64 frames. Afterwards the frame is cropped to the face and transformed to be $160x160$ pixels.
+image frames were augmented, to create a more diverse training set. The augmentation includes: horizontal flips, color jitters and
+random rotations. 50\% of the data was augmented, the other 50\% were not not changed.
+
 \subsection{Text Branch: Whisper Transcription and BERT-LoRA Classification}
 \label{sec:text_branch_project}
 
