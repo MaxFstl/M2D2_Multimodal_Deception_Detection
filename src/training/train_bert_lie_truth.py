@@ -246,6 +246,7 @@ def detailed_evaluation(trainer, dataset, split_name):
         metric_key_prefix=split_name.lower(),
     )
 
+
     prefix = split_name.lower()
 
     print(f"{split_name} Accuracy : {results[f'{prefix}_accuracy']:.4f}")
