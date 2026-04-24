@@ -1,0 +1,32 @@
+{
+  "checkpoint": "checkpoints\\DOLOS_fusion_Encoders_4_Adapter_True_type_nlp_final_epoch_9.pt",
+  "model_type": "fusion",
+  "model_config": {
+    "model_to_train": "fusion",
+    "num_encoders": 4,
+    "adapter": true,
+    "adapter_type": "nlp",
+    "fusion_type": "concat",
+    "multi": false,
+    "num_frames": 16
+  },
+  "test_samples": 213,
+  "metrics": {
+    "accuracy": 0.5586854460093896,
+    "f1_score": 0.5480769230769231,
+    "precision": 0.5816326530612245,
+    "recall": 0.5181818181818182,
+    "auc_roc": 0.6250661959399824
+  },
+  "confusion_matrix": [
+    [
+      62,
+      41
+    ],
+    [
+      53,
+      57
+    ]
+  ],
+  "timestamp": "2026-04-24T10:46:11.978347"
+}
