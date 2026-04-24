@@ -1,0 +1,81 @@
+\section{Methodology}
+\label{sec:methodology}
+For deception detection we built ontop of the Arcitectur proposed in \cite{guo2023audio}. 
+It uses Audio and Video encoders to generate feature vectors. These feature vectors are fused together with an early-stage crossmodal 
+mechanism that continuously links what a person says with how their face moves. Because fully retraining massive audio and video models 
+is computationally expensive, the architecture relies on lightweight, trainable adapters inserted directly into the encoder layers. 
+This efficient setup allows the model to capture subtle, fleeting deceptive behaviors over time. 
+
+We build a new modality into the system. We synthesise text from the audio data and feed it into the model too.
+
+\subsection{Text Branch: Whisper Transcription and BERT-LoRA Classification}
+\label{sec:text_branch_project}
+
+This project adds a text-based deception detection branch to the M2D2 framework. The goal is to convert the audio track into English transcripts and then train a lightweight binary classifier that predicts whether each transcript is truthful or deceptive.
+
+\subsubsection{Whisper Transcription}
+Audio files from the DOLOS data directory are transcribed with OpenAI Whisper. Two Whisper configurations, \texttt{medium} and \texttt{large-v3}, are compared by generating parallel transcript folders. The final text-classification pipeline uses the \texttt{large-v3} transcripts because higher-quality automatic speech recognition is expected to provide cleaner semantic input for the downstream classifier. Each \texttt{.wav} file is converted into a corresponding \texttt{.txt} sample, preserving filenames so that labels can be recovered consistently from the original data naming scheme.
+
+\subsubsection{Training Method}
+The text classifier is based on \texttt{bert-base-uncased} with LoRA adapters for parameter-efficient fine-tuning. Each transcript file is treated as one sample. Files whose names contain \texttt{truth} are assigned label 0, and files whose names contain \texttt{lie} are assigned label 1. The dataset contains approximately 152 English transcript samples and is split into training test sets and validation sets using an 70/15/15 stratified split.
+
+During training, transcripts are tokenized with BERT tokenization and truncated or padded to a maximum length of 256 tokens. LoRA is applied to the BERT attention query and value projection modules with rank $r=8$, $\alpha=16$, and dropout 0.1. This keeps the base BERT model mostly frozen while training only a small number of adapter parameters. The main training configuration uses 50 epochs, batch size 16, and learning rate $2\times10^{-5}$.
+
+
+\subsection{The Wav2Vec Model}
+
+\subsection{The Vision Transformer}
+For the feature generation of the visiual branch, we use the Vision Transformer (ViT) \cite{DBLP:journals/corr/abs-2010-11929}.
+Every video clip is split into 64 individual frames. These frames are input into the ViT, see figure \ref{fig:ViT}.
+Every image is then split into non-overlapping patches of size $16x16$, flattened and linearly projected. 
+These patches are then embedded and receive a positional embedding, so the attention mechansim knows which position 
+the patches have been in the original image. Then a transformer encoder layer attends the patches with each other and a MLP
+at the end outputs a classification. Since we have 64 output vectors, we take the average output and pass it to the fusion model.
+
+\begin{figure}[t]
+  \centering
+   \includegraphics[width=0.8\linewidth]{images/ViT.png}
+   \caption{The architecture of the ViT}
+   \label{fig:ViT}
+\end{figure}
+
+
+\subsection{Uniform Temporal Adapters (UT-Adapters)}
+To avoid the heavy computational cost of retraining massive audio, visual and language models, the base weights of the encoders are completely frozen. 
+Instead, the architecture introduces small, trainable modules called Uniform Temporal Adapters (UT-Adapters). 
+These adapters are inserted directly inside the individual layers of both the audio, video and language networks. 
+Their main job is to track quick, local changes over time. 
+By using a simple 1D-convolution, the adapters look at neighboring frames or short audio segments to capture brief, 
+subtle behaviors—like a fleeting micro-expression or a sudden stutter—that are crucial for spotting deception, 
+without needing millions of trainable parameters.
+
+\begin{figure}[t]
+  \centering
+   \includegraphics[width=0.8\linewidth]{images/UT-adapter.png}
+   \caption{The integration of the UT-Adapters in the encoeder layers. Learnable layers are marked by fire, while frozen layers are marked by snowflakes}
+   \label{fig:UTAdapter}
+\end{figure}
+
+\subsection{Early-Stage Audio-Visual Fusion (PAVF)}
+Many standard models process audio and video entirely separately and only combine the results at the very end. 
+However, deception often involves complex, split-second interactions between what someone is saying and what their face is doing. 
+To address this, the architecture of \cite{guo2023audio} uses Plug-in Audio-Visual Fusion (PAVF) modules. 
+Rather than waiting until the end, these modules sit between the early layers of the audio and video encoders. 
+They calculate the correlation between the two streams, allowing them to continuously exchange information. 
+This means the visual network knows exactly what the audio network is hearing—and 
+vice versa—creating a highly synchronized representation of the person's behavior before a final prediction is made.
+We extended this system to also fuse language features into the system.
+
+\begin{figure}[t]
+  \centering
+   \includegraphics[width=0.8\linewidth]{images/PAVF.png}
+   \caption{The PAVF module.}
+   \label{fig:PAVF}
+\end{figure}
+
+\begin{figure*}[t]
+  \centering
+   \includegraphics[width=\linewidth]{images/Fusion-module.png}
+   \caption{The main architecture of the original model.}
+   \label{fig:FusionModule}
+\end{figure*}
