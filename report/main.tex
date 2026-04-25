@@ -76,7 +76,7 @@ the adapters for handling the new text modality. He was also responsible for the
 
 \textbf{Wenhui Dong} developed the text-branch project. This contribution includes Whisper-based audio transcription, preparation of transcript files for lie-versus-truth classification, BERT tokenization, LoRA fine-tuning of \texttt{bert-base-uncased}, model saving, and inference testing for the text modality.
 
-\textbf{Tszhin Yuen} implemented the audio branch. Built the data loader for DOLOS audio clips, integrated Wav2Vec2 with frozen pre‑trained weights, and inserted two types of UT‑Adapters (convolutional and bottleneck) into the Transformer layers. Performed hyperparameter optimisation using Optuna and trained the audio model with cross‑entropy loss, recording validation metrics. The extracted 768‑D audio features are passed to the multimodal fusion module.
+\textbf{Tszhin Yuen} Optimized DOLOS audio data loader, integrated frozen Wav2Vec2 with two UT-Adapters (convolutional/bottleneck) into its Transformer layers. Performed Optuna hyperparameter search and trained the model with cross-entropy loss, recording validation metrics. Extracted 768-D audio features for the fusion module.
 
 \section*{Acknowledgements}
 Parts of the codebase, especially additions to the UT-adapter and the fusion modules from the original 

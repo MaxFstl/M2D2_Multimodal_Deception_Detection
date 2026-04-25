@@ -5,15 +5,7 @@ This section covers the the data preprocessing, model details and training, as w
 Every video clip was cut into 64 frames. Afterwards the frame is cropped to the face and transformed to be $160x160$ pixels.
 
 \subsection{Hyperparameter Optimisation}
-Before performing the joint multimodal training, we first optimized the audio branch independently to identify the best hyperparameter configuration. We use the AdamW optimizer with a cross‑entropy loss. To find a good configuration on the DOLOS dataset, we perform hyperparameter search using Optuna over 20 trials. The search space includes:
-\begin{itemize}
-    \item Learning rate: log-uniform from \(5\times10^{-5}\) to \(3\times10^{-4}\)
-    \item Batch size: 4 or 8
-    \item Number of trainable encoder layers \(N\): integer from 2 to 6
-    \item Adapter type: {\tt conv} or {\tt nlp}
-\end{itemize}
-For each trial, the model is trained for 10 epochs with a 90/10 training‑validation split. After the best hyperparameter combination is identified, a final training run of 50 epochs is performed on the full training set, and the validation metrics (accuracy, precision, recall, F1) are recorded. \\
-The configuration from the best trial was then locked and integrated into the full M2D2 system for the final joint training experiments. In this final stage, the audio branch parameters remained frozen to focus training effort on the fusion modules and the newly added text modality.
+We first optimised the audio branch independently using Optuna over 20 trials. The search space included learning rate (\(5\times10^{-5}\) to \(3\times10^{-4}\), log-uniform), batch size (4 or 8), number of trainable encoder layers (2–6), and adapter type (conv/nlp). Each trial was trained for 10 epochs with a 90/10 train‑validation split. The best configuration was then retrained for 50 epochs on the full training set, and its validation metrics (accuracy, precision, recall, F1) were recorded. This optimised audio branch was subsequently frozen and integrated into the full M2D2 system for joint training, focusing all updates on the fusion modules and the new text modality.
 
 \subsection{Model Details and Training}
 The model was trained for 15 epochs. We used a batchsize of 16, learning rate of 0.0001 and utilized early stopping to prevent overfitting.
@@ -37,11 +29,12 @@ The notebook shows that the Whisper transcription pipeline, BERT-LoRA fine-tunin
 
 \subsubsection{Audio Part Results}
 
-For the audio modality, the best hyperparameter configuration was identified through 20 Optuna trials, with the optimal setup being 4 trainable encoder layers ($N=4$) and a convolutional adapter (conv) (Trial 10). During the final 50-epoch training run using these parameters, the model reached a peak accuracy of 0.6250 and an F1-score of 0.6625 (at Epoch 47). As illustrated in Figure [\ref{fig:curve}], the performance metrics—particularly recall and F1—exhibited high variance in the early stages but stabilized after approximately 40 epochs. These results confirm that the audio branch successfully learned to extract deceptive acoustic features from raw waveforms, providing a reliable 768-dimensional feature representation for the subsequent multimodal fusion.
+For the audio modality, the best configuration (4 trainable encoder layers, conv adapter) was identified via 20 Optuna trials (Trial 10). In the final 50‑epoch run, the model achieved peak accuracy of 0.6250 and F1 of 0.6625 (Epoch 47). As illustrated in Figure [\ref{fig:curve}], performance metrics showed high initial variance but stabilised after ~40 epochs, 
+confirming that the audio branch learns deceptive acoustic features and provides reliable 768‑D representations for fusion.
 
 \begin{figure}[t]
   \centering
-  \includegraphics[width=1\linewidth]{images/training_metrics_curve.png}
+  \includegraphics[width=0.6\linewidth]{images/training_metrics_curve.png}
   \caption{Training Metrics Curve}
   \label{fig:curve}
 \end{figure}

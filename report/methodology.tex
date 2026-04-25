@@ -28,7 +28,7 @@ During training, transcripts are tokenized with BERT tokenization and truncated 
 
 
 \subsection{The Wav2Vec Model}
-To find the optimal configuration for the audio branch, we perform a preliminary independent optimization. During this phase, we adopt a parameter-efficient strategy where the feature encoder is frozen, and only the last $N$ Transformer layers ($N \in \{2, \dots, 6\}$) and a classifier head are trainable. The results of this optimization (including the specific value of $N$ and the adapter type) define the fixed audio backbone used in the subsequent multimodal joint training.\\
+To find the optimal configuration for the audio branch, we perform an independent optimization. The feature encoder is frozen; only the last \(N\) Transformer layers (\(N \in \{2,\dots,6\}\)) and the classifier head are trainable. The resulting best \(N\) and adapter type then serve as the fixed audio backbone for multimodal joint training.
 
 Two types of adapters are inserted into the frozen Transformer blocks to further improve efficiency and flexibility. 
 Figure~\ref{fig:nlp_adapter} shows the NLP‑style adapter, which follows a serial bottleneck structure: \(768 \rightarrow 256 \rightarrow 768\) with ReLU activation and residual connection. 
@@ -37,14 +37,14 @@ The former is more parameter‑efficient, while the latter captures local tempor
 
 \begin{figure}[t]
   \centering
-  \includegraphics[width=1\linewidth]{images/NLP.png}
+  \includegraphics[width=0.7\linewidth]{images/NLP.png}
   \caption{The architecture of the NLP-style adapter.}
   \label{fig:nlp_adapter}
 \end{figure}
 
 \begin{figure}[t]
   \centering
-  \includegraphics[width=1\linewidth]{images/Conv.png}
+  \includegraphics[width=0.8\linewidth]{images/Conv.png}
   \caption{The architecture of the Conv-style adapter.}
   \label{fig:conv_adapter}
 \end{figure}
