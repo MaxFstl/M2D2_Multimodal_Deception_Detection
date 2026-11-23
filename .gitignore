@@ -10,7 +10,6 @@ __pycache__/
 # C extensions
 *.so
 *.mp4
-!*inference_video/videos/*
 *.wav
 data/DOLOS/videos
 data/DOLOS/images
@@ -21,6 +20,7 @@ data/DOLOS/transcripts
 data/DOLOS/bad_files.txt
 
 cookies.txt
+
 # Distribution / packaging
 .Python
 build/
@@ -220,3 +220,29 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# --- Private / local files (never publish) ---
+*cookies*.txt
+.DS_Store
+.idea/
+logs/
+inference_video/
+test.py
+train_fusion_new.sh
+src/data/reoprt.txt
+
+# DOLOS is licensed (EULA) — do not redistribute data or derived transcripts
+data/
+
+# LoRA training checkpoints (final adapter in src/models/bert_lie_truth_lora/ is kept)
+src/models/bert_lie_truth_lora/checkpoint-*/
+notebooks/bert_lie_truth_lora/
+!src/models/bert_lie_truth_lora/adapter_model.safetensors
+
+# LaTeX build artifacts
+report/*.aux
+report/*.bbl
+report/*.blg
+report/*.brf
+report/*.out
+report/*.synctex.gz
